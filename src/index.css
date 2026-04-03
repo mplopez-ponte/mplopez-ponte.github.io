@@ -1,0 +1,218 @@
+/* ============================================
+   SmartTask IA - Estilos Globales
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+:root {
+  --st-bg:         #0d0f14;
+  --st-surface:    #151820;
+  --st-surface2:   #1c2030;
+  --st-border:     #262b3d;
+  --st-primary:    #6366f1;
+  --st-primary-h:  #7c7ff5;
+  --st-secondary:  #22d3ee;
+  --st-success:    #10b981;
+  --st-warning:    #f59e0b;
+  --st-danger:     #ef4444;
+  --st-text:       #e2e8f0;
+  --st-muted:      #64748b;
+  --st-radius:     12px;
+  --st-radius-sm:  8px;
+  --st-shadow:     0 4px 24px rgba(0,0,0,0.4);
+  --st-shadow-lg:  0 8px 48px rgba(0,0,0,0.6);
+
+  /* Prioridades */
+  --prior-baja:    #10b981;
+  --prior-media:   #3b82f6;
+  --prior-alta:    #f59e0b;
+  --prior-urgente: #ef4444;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--st-bg);
+  color: var(--st-text);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+}
+
+/* ─── Scrollbar personalizada ─── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--st-surface); }
+::-webkit-scrollbar-thumb { background: var(--st-border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--st-muted); }
+
+/* ─── Cards ─── */
+.st-card {
+  background: var(--st-surface);
+  border: 1px solid var(--st-border);
+  border-radius: var(--st-radius);
+  box-shadow: var(--st-shadow);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.st-card:hover { border-color: rgba(99,102,241,0.3); }
+
+/* ─── Botones ─── */
+.btn-primary {
+  background: var(--st-primary) !important;
+  border-color: var(--st-primary) !important;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  transition: all 0.2s !important;
+}
+.btn-primary:hover {
+  background: var(--st-primary-h) !important;
+  border-color: var(--st-primary-h) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(99,102,241,0.4) !important;
+}
+
+.btn-outline-primary {
+  color: var(--st-primary) !important;
+  border-color: var(--st-primary) !important;
+}
+.btn-outline-primary:hover {
+  background: var(--st-primary) !important;
+  color: #fff !important;
+}
+
+/* ─── Forms ─── */
+.form-control, .form-select {
+  background: var(--st-surface2) !important;
+  border-color: var(--st-border) !important;
+  color: var(--st-text) !important;
+  border-radius: var(--st-radius-sm) !important;
+  transition: border-color 0.2s, box-shadow 0.2s !important;
+}
+.form-control:focus, .form-select:focus {
+  border-color: var(--st-primary) !important;
+  box-shadow: 0 0 0 3px rgba(99,102,241,0.2) !important;
+  background: var(--st-surface2) !important;
+}
+.form-control::placeholder { color: var(--st-muted) !important; }
+.form-label { color: var(--st-text); font-weight: 500; font-size: 0.875rem; }
+
+/* ─── Badges de prioridad ─── */
+.badge-prioridad {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 0.3em 0.75em;
+  border-radius: 20px;
+}
+.badge-baja    { background: rgba(16,185,129,0.15); color: var(--prior-baja); border: 1px solid rgba(16,185,129,0.3); }
+.badge-media   { background: rgba(59,130,246,0.15); color: var(--prior-media); border: 1px solid rgba(59,130,246,0.3); }
+.badge-alta    { background: rgba(245,158,11,0.15); color: var(--prior-alta); border: 1px solid rgba(245,158,11,0.3); }
+.badge-urgente { background: rgba(239,68,68,0.15); color: var(--prior-urgente); border: 1px solid rgba(239,68,68,0.3); }
+
+/* ─── Badges de estado ─── */
+.badge-pendiente    { background: rgba(100,116,139,0.15); color: #94a3b8; border: 1px solid rgba(100,116,139,0.3); }
+.badge-en_progreso  { background: rgba(99,102,241,0.15); color: var(--st-primary); border: 1px solid rgba(99,102,241,0.3); }
+.badge-completada   { background: rgba(16,185,129,0.15); color: var(--st-success); border: 1px solid rgba(16,185,129,0.3); }
+.badge-cancelada    { background: rgba(239,68,68,0.1); color: var(--st-danger); border: 1px solid rgba(239,68,68,0.2); }
+
+/* ─── Sidebar ─── */
+.st-sidebar {
+  width: 260px;
+  min-height: 100vh;
+  background: var(--st-surface);
+  border-right: 1px solid var(--st-border);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease;
+}
+.st-main { margin-left: 260px; min-height: 100vh; background: var(--st-bg); }
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  border-radius: var(--st-radius-sm);
+  color: var(--st-muted);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: all 0.15s;
+  margin: 2px 0;
+}
+.sidebar-link:hover { color: var(--st-text); background: var(--st-surface2); }
+.sidebar-link.active { color: var(--st-primary); background: rgba(99,102,241,0.1); }
+.sidebar-link i { font-size: 1.1rem; width: 20px; text-align: center; }
+
+/* ─── IA Badge ─── */
+.ia-badge {
+  background: linear-gradient(135deg, rgba(99,102,241,0.2), rgba(34,211,238,0.15));
+  border: 1px solid rgba(99,102,241,0.35);
+  border-radius: 20px;
+  padding: 0.25em 0.75em;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--st-secondary);
+  text-transform: uppercase;
+}
+
+/* ─── Progress bar ─── */
+.progress {
+  background: var(--st-border) !important;
+  border-radius: 10px !important;
+  height: 6px !important;
+}
+.progress-bar { border-radius: 10px !important; }
+
+/* ─── Animaciones ─── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-in-up { animation: fadeInUp 0.3s ease forwards; }
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(99,102,241,0.4); }
+  50%       { box-shadow: 0 0 0 8px rgba(99,102,241,0); }
+}
+.pulse-glow { animation: pulse-glow 2s infinite; }
+
+/* ─── Toasts ─── */
+.Toastify__toast { border-radius: var(--st-radius-sm) !important; font-family: 'Inter', sans-serif !important; }
+.Toastify__toast-theme--dark { background: var(--st-surface2) !important; border: 1px solid var(--st-border) !important; }
+
+/* ─── Responsive ─── */
+@media (max-width: 768px) {
+  .st-sidebar { transform: translateX(-100%); }
+  .st-sidebar.open { transform: translateX(0); }
+  .st-main { margin-left: 0 !important; }
+}
+
+/* ─── Modal ─── */
+.modal-content {
+  background: var(--st-surface) !important;
+  border: 1px solid var(--st-border) !important;
+  border-radius: var(--st-radius) !important;
+  color: var(--st-text) !important;
+}
+.modal-header { border-bottom-color: var(--st-border) !important; }
+.modal-footer { border-top-color: var(--st-border) !important; }
+
+/* ─── Dropdown ─── */
+.dropdown-menu {
+  background: var(--st-surface2) !important;
+  border-color: var(--st-border) !important;
+  border-radius: var(--st-radius-sm) !important;
+}
+.dropdown-item { color: var(--st-text) !important; }
+.dropdown-item:hover { background: var(--st-border) !important; }
