@@ -21,7 +21,7 @@ export const AuthProvider = ({ children }) => {
 
   const cargarPerfil = async () => {
     try {
-      const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/auth/perfil`);
+      const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/api/auth/perfil`);      
       setUsuario(data.usuario);
     } catch {
       cerrarSesion();
@@ -31,8 +31,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const iniciarSesion = async (email, password) => {
-    const { data } = await axios.post(`${import.meta.env.VITE_API_URL}/auth/login`, { email, password });
-    localStorage.setItem('smarttask_token', data.token);
+  const { data } = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/login`, { email, password });    localStorage.setItem('smarttask_token', data.token);
     setToken(data.token);
     setUsuario(data.usuario);
     axios.defaults.headers.common['Authorization'] = `Bearer ${data.token}`;
@@ -40,8 +39,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const registrar = async (nombre, email, password) => {
-    const { data } = await axios.post(`${import.meta.env.VITE_API_URL}/auth/registro`, { nombre, email, password });
-    localStorage.setItem('smarttask_token', data.token);
+  const { data } = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/registro`, { nombre, email, password });    localStorage.setItem('smarttask_token', data.token);
     setToken(data.token);
     setUsuario(data.usuario);
     axios.defaults.headers.common['Authorization'] = `Bearer ${data.token}`;
