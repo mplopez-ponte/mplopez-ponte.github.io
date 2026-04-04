@@ -39,6 +39,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const registrar = async (nombre, email, password) => {
+      console.log('URL:', `${import.meta.env.VITE_API_URL}/api/auth/registro`); // ← añade esto
   const { data } = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/registro`, { nombre, email, password });    localStorage.setItem('smarttask_token', data.token);
     setToken(data.token);
     setUsuario(data.usuario);
