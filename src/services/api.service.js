@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
+  baseURL: `${import.meta.env.VITE_API_URL}/api`
 });
 
 // Interceptor para añadir el token automáticamente
@@ -25,12 +25,12 @@ API.interceptors.response.use(
 
 // ─── Auth ─────────────────────────────────────────────
 export const authService = {
-  login: (datos) => API.post('/auth/login', datos),
-  registro: (datos) => API.post('/auth/registro', datos),
-  perfil: () => API.get('/auth/perfil'),
-  actualizarPerfil: (datos) => API.put('/auth/perfil', datos),
-  cambiarPassword: (datos) => API.put('/auth/cambiar-password', datos),
-  eliminarCuenta: (datos) => API.delete('/auth/cuenta', { data: datos })
+  login: (datos) => API.post('/api/auth/login', datos),
+  registro: (datos) => API.post('/api/auth/registro', datos),
+  perfil: () => API.get('/api/auth/perfil'),
+  actualizarPerfil: (datos) => API.put('/api/auth/perfil', datos),
+  cambiarPassword: (datos) => API.put('/api/auth/cambiar-password', datos),
+  eliminarCuenta: (datos) => API.delete('/api/auth/cuenta', { data: datos })
 };
 
 // ─── Tareas ───────────────────────────────────────────
