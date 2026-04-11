@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import {
   Chart as ChartJS, ArcElement, Tooltip, Legend,
@@ -15,7 +15,6 @@ ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale,
 
 const MESES = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
 
-// Opciones base para los gráficos (tema oscuro)
 const baseOpts = {
   responsive: true,
   maintainAspectRatio: false,
@@ -26,6 +25,8 @@ const baseOpts = {
 
 export default function DashboardPage() {
   const { usuario } = useAuth();
+  const navigate = useNavigate(); // ✅ declarado dentro del componente
+
   const [stats, setStats] = useState(null);
   const [prodData, setProdData] = useState(null);
   const [analisisIA, setAnalisisIA] = useState('');
@@ -69,7 +70,6 @@ export default function DashboardPage() {
     </div>
   );
 
-  // ─── Datos para gráficos ─────────────────────────────
   const estadoLabels = { pendiente: 'Pendiente', en_progreso: 'En Progreso', completada: 'Completada', cancelada: 'Cancelada' };
   const estadoColors = ['#64748b','#6366f1','#10b981','#ef4444'];
 
@@ -113,7 +113,6 @@ export default function DashboardPage() {
     }]
   };
 
-  // Productividad: creadas vs completadas
   const allDays = [...new Set([
     ...(prodData?.creadasPorDia?.map(d => d._id) || []),
     ...(prodData?.completadasPorDia?.map(d => d._id) || [])
@@ -137,10 +136,10 @@ export default function DashboardPage() {
 
   const r = stats?.resumen || {};
   const kpis = [
-    { label: 'Total de tareas',      value: r.total || 0,           icon: 'bi-list-task',        color: '#6366f1' },
-    { label: 'Completadas',          value: r.completadas || 0,     icon: 'bi-check-circle-fill', color: '#10b981' },
-    { label: 'Vencidas',             value: r.vencidas || 0,        icon: 'bi-exclamation-circle',color: '#ef4444' },
-    { label: 'Vencen en 7 días',     value: r.proximasAVencer || 0, icon: 'bi-clock-history',    color: '#f59e0b' },
+    { label: 'Total de tareas',  value: r.total || 0,           icon: 'bi-list-task',         color: '#6366f1' },
+    { label: 'Completadas',      value: r.completadas || 0,     icon: 'bi-check-circle-fill',  color: '#10b981' },
+    { label: 'Vencidas',         value: r.vencidas || 0,        icon: 'bi-exclamation-circle', color: '#ef4444' },
+    { label: 'Vencen en 7 días', value: r.proximasAVencer || 0, icon: 'bi-clock-history',      color: '#f59e0b' },
   ];
 
   return (
@@ -155,9 +154,11 @@ export default function DashboardPage() {
             Aquí tienes el resumen de tu productividad
           </p>
         </div>
+        {/* ✅ Navega a /tareas y le indica que abra el modal */}
         <button
           className="btn btn-primary d-flex align-items-center gap-2"
-          onClick={() => navigate('/tareas', { state: { abrirModal: true } })}>
+          onClick={() => navigate('/tareas', { state: { abrirModal: true } })}
+        >
           <i className="bi bi-plus-lg" /> Nueva Tarea
         </button>
       </div>
@@ -197,7 +198,6 @@ export default function DashboardPage() {
 
       {/* Gráficos fila 1 */}
       <div className="row g-3 mb-3">
-        {/* Doughnut - Por estado */}
         <div className="col-md-4">
           <div className="st-card p-3 h-100">
             <h6 className="mb-3 fw-semibold">Por Estado</h6>
@@ -211,7 +211,6 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Bar - Por prioridad */}
         <div className="col-md-4">
           <div className="st-card p-3 h-100">
             <h6 className="mb-3 fw-semibold">Por Prioridad</h6>
@@ -228,7 +227,6 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Por categoría */}
         <div className="col-md-4">
           <div className="st-card p-3 h-100">
             <h6 className="mb-3 fw-semibold">Por Categoría</h6>
@@ -251,7 +249,6 @@ export default function DashboardPage() {
 
       {/* Gráficos fila 2 */}
       <div className="row g-3 mb-3">
-        {/* Line - Completadas por mes */}
         <div className="col-md-6">
           <div className="st-card p-3 h-100">
             <h6 className="mb-3 fw-semibold">Completadas por mes</h6>
@@ -268,7 +265,6 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Line - Productividad últimos 30 días */}
         <div className="col-md-6">
           <div className="st-card p-3 h-100">
             <h6 className="mb-3 fw-semibold">Productividad (últimos 30 días)</h6>
@@ -293,8 +289,12 @@ export default function DashboardPage() {
             <h6 className="mb-0 fw-semibold">Análisis de carga de trabajo</h6>
             <span className="ia-badge">IA</span>
           </div>
-          <button className="btn btn-sm d-flex align-items-center gap-2" onClick={handleAnalizarIA} disabled={cargandoIA}
-            style={{ background: 'rgba(99,102,241,0.15)', color: 'var(--st-primary)', border: '1px solid rgba(99,102,241,0.3)', borderRadius: 'var(--st-radius-sm)' }}>
+          <button
+            className="btn btn-sm d-flex align-items-center gap-2"
+            onClick={handleAnalizarIA}
+            disabled={cargandoIA}
+            style={{ background: 'rgba(99,102,241,0.15)', color: 'var(--st-primary)', border: '1px solid rgba(99,102,241,0.3)', borderRadius: 'var(--st-radius-sm)' }}
+          >
             {cargandoIA
               ? <><span className="spinner-border spinner-border-sm" />Analizando...</>
               : <><i className="bi bi-magic" />Analizar con IA</>

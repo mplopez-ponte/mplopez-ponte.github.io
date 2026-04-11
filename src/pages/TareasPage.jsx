@@ -1,21 +1,20 @@
-import React, { useState, useEffect, useCallback, use } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { tareaService } from '../services/api.service';
 import ModalCrearTarea from '../components/tasks/ModalCrearTarea';
-import { useLocation } from 'react-router-dom';
 
 const PRIORIDAD_ORDEN = { urgente: 0, alta: 1, media: 2, baja: 3 };
-const location = useLocation();
 
 export default function TareasPage() {
+  const location = useLocation(); // ✅ dentro del componente
   const [tareas, setTareas] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [filtros, setFiltros] = useState({ estado: '', prioridad: '', buscar: '' });
   const [showModal, setShowModal] = useState(false);
   const [pagina, setPagina] = useState(1);
   const [totalPaginas, setTotalPaginas] = useState(1);
-  const [vista, setVista] = useState('lista'); // 'lista' | 'kanban'
+  const [vista, setVista] = useState('lista');
 
   const cargarTareas = useCallback(async () => {
     setCargando(true);
@@ -32,6 +31,14 @@ export default function TareasPage() {
   }, [filtros, pagina]);
 
   useEffect(() => { cargarTareas(); }, [cargarTareas]);
+
+  // ✅ Abrir modal si viene del Dashboard con state.abrirModal
+  useEffect(() => {
+    if (location.state?.abrirModal) {
+      setShowModal(true);
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state]);
 
   const handleEliminar = async (id) => {
     if (!window.confirm('¿Eliminar esta tarea?')) return;
@@ -53,14 +60,6 @@ export default function TareasPage() {
       toast.error('Error al actualizar estado');
     }
   };
-
-  useEffect(() => {
-  if (location.state?.abrirModal) {
-    setShowModal(true);
-    // limpiar el state para que no se reabra al refrescar
-    window.history.replaceState({}, document.title);
-  }
-}, [location.state]);
 
   const formatFecha = (f) => f ? new Date(f).toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' }) : '—';
 
@@ -177,8 +176,10 @@ export default function TareasPage() {
                   <div className="flex-grow-1 overflow-hidden">
                     <div className="d-flex align-items-center gap-2 flex-wrap mb-1">
                       <Link to={`/tareas/${tarea._id}`} className="fw-semibold text-decoration-none"
-                        style={{ color: tarea.estado === 'completada' ? 'var(--st-muted)' : 'var(--st-text)',
-                                 textDecoration: tarea.estado === 'completada' ? 'line-through' : 'none' }}>
+                        style={{
+                          color: tarea.estado === 'completada' ? 'var(--st-muted)' : 'var(--st-text)',
+                          textDecoration: tarea.estado === 'completada' ? 'line-through' : 'none'
+                        }}>
                         {tarea.titulo}
                       </Link>
                       <span className={`badge-prioridad badge-${tarea.prioridad}`}>{tarea.prioridad}</span>
@@ -239,10 +240,10 @@ export default function TareasPage() {
       {vista === 'kanban' && !cargando && (
         <div className="row g-3">
           {[
-            { key: 'pendiente', label: 'Pendiente', color: '#64748b' },
-            { key: 'en_progreso', label: 'En Progreso', color: '#6366f1' },
-            { key: 'completada', label: 'Completada', color: '#10b981' },
-            { key: 'cancelada', label: 'Cancelada', color: '#ef4444' }
+            { key: 'pendiente',  label: 'Pendiente',   color: '#64748b' },
+            { key: 'en_progreso',label: 'En Progreso', color: '#6366f1' },
+            { key: 'completada', label: 'Completada',  color: '#10b981' },
+            { key: 'cancelada',  label: 'Cancelada',   color: '#ef4444' }
           ].map(col => (
             <div key={col.key} className="col-md-3">
               <div className="st-card p-2 h-100">
