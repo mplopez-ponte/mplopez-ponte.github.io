@@ -155,9 +155,11 @@ export default function DashboardPage() {
             Aquí tienes el resumen de tu productividad
           </p>
         </div>
-        <Link to="/tareas" className="btn btn-primary d-flex align-items-center gap-2">
+        <button
+          className="btn btn-primary d-flex align-items-center gap-2"
+          onClick={() => navigate('/tareas', { state: { abrirModal: true } })}>
           <i className="bi bi-plus-lg" /> Nueva Tarea
-        </Link>
+        </button>
       </div>
 
       {/* KPIs */}

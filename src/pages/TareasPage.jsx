@@ -1,10 +1,12 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, use } from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { tareaService } from '../services/api.service';
 import ModalCrearTarea from '../components/tasks/ModalCrearTarea';
+import { useLocation } from 'react-router-dom';
 
 const PRIORIDAD_ORDEN = { urgente: 0, alta: 1, media: 2, baja: 3 };
+const location = useLocation();
 
 export default function TareasPage() {
   const [tareas, setTareas] = useState([]);
@@ -51,6 +53,14 @@ export default function TareasPage() {
       toast.error('Error al actualizar estado');
     }
   };
+
+  useEffect(() => {
+  if (location.state?.abrirModal) {
+    setShowModal(true);
+    // limpiar el state para que no se reabra al refrescar
+    window.history.replaceState({}, document.title);
+  }
+}, [location.state]);
 
   const formatFecha = (f) => f ? new Date(f).toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' }) : '—';
 
