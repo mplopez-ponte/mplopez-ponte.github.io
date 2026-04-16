@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { toast } from 'react-toastify';
+import Footer from './Footer';
 
 export default function Layout() {
   const { usuario, cerrarSesion } = useAuth();
@@ -55,8 +56,12 @@ export default function Layout() {
             Navegación
           </p>
           {navLinks.map(({ to, icon, label }) => (
-            <NavLink key={to} to={to} className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`}
-              onClick={() => setSidebarOpen(false)}>
+            <NavLink
+              key={to}
+              to={to}
+              className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`}
+              onClick={() => setSidebarOpen(false)}
+            >
               <i className={`bi ${icon}`} />
               {label}
             </NavLink>
@@ -75,19 +80,30 @@ export default function Layout() {
               <p className="mb-0 text-truncate" style={{ fontSize: '0.72rem', color: 'var(--st-muted)' }}>{usuario?.email}</p>
             </div>
           </div>
-          <button className="btn btn-sm w-100 d-flex align-items-center gap-2" onClick={handleLogout}
-            style={{ background: 'rgba(239,68,68,0.1)', color: '#f87171', border: '1px solid rgba(239,68,68,0.2)', borderRadius: 'var(--st-radius-sm)' }}>
+          <button
+            className="btn btn-sm w-100 d-flex align-items-center gap-2"
+            onClick={handleLogout}
+            style={{
+              background: 'rgba(239,68,68,0.1)',
+              color: '#f87171',
+              border: '1px solid rgba(239,68,68,0.2)',
+              borderRadius: 'var(--st-radius-sm)',
+            }}
+          >
             <i className="bi bi-box-arrow-right" />
             Cerrar sesión
           </button>
         </div>
       </aside>
 
-      {/* Main content */}
-      <main className="st-main flex-grow-1">
+      {/* Main content — flex column para que el footer quede abajo */}
+      <main className="st-main flex-grow-1 d-flex flex-column" style={{ minHeight: '100vh' }}>
+
         {/* Topbar móvil */}
-        <div className="d-flex d-md-none align-items-center justify-content-between p-3 border-bottom"
-          style={{ background: 'var(--st-surface)', borderColor: 'var(--st-border)' }}>
+        <div
+          className="d-flex d-md-none align-items-center justify-content-between p-3 border-bottom"
+          style={{ background: 'var(--st-surface)', borderColor: 'var(--st-border)' }}
+        >
           <div className="d-flex align-items-center gap-2">
             <div className="rounded-2 d-flex align-items-center justify-content-center"
               style={{ width: 30, height: 30, background: 'var(--st-primary)' }}>
@@ -95,15 +111,23 @@ export default function Layout() {
             </div>
             <span className="fw-bold" style={{ fontFamily: 'Space Grotesk' }}>SmartTask IA</span>
           </div>
-          <button className="btn btn-sm" onClick={() => setSidebarOpen(true)}
-            style={{ background: 'var(--st-surface2)', color: 'var(--st-text)', border: '1px solid var(--st-border)' }}>
+          <button
+            className="btn btn-sm"
+            onClick={() => setSidebarOpen(true)}
+            style={{ background: 'var(--st-surface2)', color: 'var(--st-text)', border: '1px solid var(--st-border)' }}
+          >
             <i className="bi bi-list fs-5" />
           </button>
         </div>
 
-        <div className="p-3 p-md-4">
+        {/* Contenido de la página — flex-grow para empujar el footer abajo */}
+        <div className="p-3 p-md-4 flex-grow-1">
           <Outlet />
         </div>
+
+        {/* Footer */}
+        <Footer />
+
       </main>
     </div>
   );
