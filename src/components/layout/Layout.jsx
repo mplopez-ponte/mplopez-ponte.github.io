@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { toast } from 'react-toastify';
-import Footer from './Footer';
+import Footer from '../layout/Footer';
 
 export default function Layout() {
   const { usuario, cerrarSesion } = useAuth();
