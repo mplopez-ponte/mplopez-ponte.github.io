@@ -11,7 +11,6 @@ export default function RegisterPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-      console.log('handleSubmit ejecutado', form); // ← añade esto
     if (form.password !== form.confirmar) {
       return toast.error('Las contraseñas no coinciden');
     }

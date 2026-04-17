@@ -10,7 +10,6 @@ import TareasPage from './pages/TareasPage';
 import TareaDetallePage from './pages/TareaDetallePage';
 import PerfilPage from './pages/PerfilPage';
 import Layout from './components/layout/Layout';
-import Footer from './components/layout/Footer';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
@@ -59,26 +58,19 @@ function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
-        {/* Envolvemos todo en un div flex para asegurar que el footer baje */}
-        <div className="d-flex flex-column min-vh-100">
-          
-          <div className="flex-grow-1">
-            <AppRoutes />
-          </div>
-
-          <Footer /> {/* Se mostrará en todas las páginas */}
-          
-          <ToastContainer
-            position="top-right"
-            autoClose={3500}
-            hideProgressBar={false}
-            newestOnTop
-            closeOnClick
-            pauseOnHover
-            theme="dark"
-          />
-        </div>
+        <AppRoutes />
+        <ToastContainer
+          position="top-right"
+          autoClose={3500}
+          hideProgressBar={false}
+          newestOnTop
+          closeOnClick
+          pauseOnHover
+          theme="dark"
+        />
       </BrowserRouter>
     </AuthProvider>
   );
 }
+
+export default App;
