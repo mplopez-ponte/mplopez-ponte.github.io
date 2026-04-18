@@ -70,7 +70,7 @@ function App() {
           theme="dark"
         />
       </BrowserRouter>
-        
+        <Footer />
     </AuthProvider>
     
   );

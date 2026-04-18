@@ -135,10 +135,7 @@ export default function Layout() {
           <Outlet />
         </div>
 
-        {/* ── Footer — visible en todas las páginas ─────── */}
-        <Footer />
-
-      </main>
+        </main>
     </div>
   );
 }
