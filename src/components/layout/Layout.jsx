@@ -125,7 +125,7 @@ export default function Layout() {
             className="btn btn-sm"
             onClick={() => setSidebarOpen(true)}
             style={{ background: 'var(--st-surface2)', color: 'var(--st-text)', border: '1px solid var(--st-border)' }}
-          >
+          >n
             <i className="bi bi-list fs-5" />
           </button>
         </div>
