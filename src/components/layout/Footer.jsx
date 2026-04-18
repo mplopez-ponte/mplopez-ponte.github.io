@@ -37,10 +37,6 @@ export default function Footer() {
           </p>
         </div>
 
-        <div>
-          <img src="https://icon-icons.com/icon/legal-license-mit/157533" alt="MIT License" style={{ width: 48, opacity: 0.6 }} />
-        </div>
-
         {/* Columna 2 — Stack tecnológico */}
         <div style={{ minWidth: 140 }}>
           <p className="mb-2 fw-semibold" style={{ fontSize: '0.78rem', color: 'var(--st-text)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
