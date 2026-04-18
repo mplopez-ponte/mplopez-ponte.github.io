@@ -3,7 +3,6 @@ import React from 'react';
 export default function Footer() {
   const año = new Date().getFullYear();
 
-  // URL de Swagger — cambiar por la URL real de Railway
   const SWAGGER_URL = import.meta.env.VITE_API_URL
     ? import.meta.env.VITE_API_URL.replace('/api', '/api/docs')
     : 'http://localhost:5000/api/docs';
@@ -35,6 +34,57 @@ export default function Footer() {
           <p style={{ color: 'var(--st-muted)', fontSize: '0.78rem', lineHeight: 1.6, maxWidth: 200 }}>
             Gestor de tareas inteligente con IA para organizar tu día a día de forma eficiente y sencilla.
           </p>
+
+          {/* MIT License Badge */}
+          <a
+            href="https://opensource.org/licenses/MIT"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Licencia MIT"
+            className="d-inline-flex align-items-center gap-2 text-decoration-none mt-1"
+            style={{
+              background: 'rgba(255,255,255,0.04)',
+              border: '1px solid var(--st-border)',
+              borderRadius: 'var(--st-radius-sm)',
+              padding: '5px 10px',
+              transition: 'all 0.2s',
+            }}
+            onMouseEnter={e => {
+              e.currentTarget.style.background = 'rgba(255,255,255,0.08)';
+              e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)';
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.background = 'rgba(255,255,255,0.04)';
+              e.currentTarget.style.borderColor = 'var(--st-border)';
+            }}
+          >
+            {/* MIT Logo SVG */}
+            <svg
+              width="28"
+              height="14"
+              viewBox="0 0 60 28"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-label="MIT License"
+            >
+              <rect width="60" height="28" rx="4" fill="#A31F34"/>
+              <text
+                x="50%"
+                y="50%"
+                dominantBaseline="central"
+                textAnchor="middle"
+                fill="white"
+                fontFamily="Arial, sans-serif"
+                fontWeight="bold"
+                fontSize="13"
+                letterSpacing="1"
+              >
+                MIT
+              </text>
+            </svg>
+            <span style={{ color: 'var(--st-muted)', fontSize: '0.7rem', fontWeight: 500 }}>
+              Licencia MIT
+            </span>
+          </a>
         </div>
 
         {/* Columna 2 — Stack tecnológico */}
@@ -44,12 +94,12 @@ export default function Footer() {
           </p>
           <div className="d-flex flex-wrap gap-2">
             {[
-              { label: 'React',    color: '#61DAFB' },
-              { label: 'Node.js',  color: '#68A063' },
-              { label: 'MongoDB',  color: '#47A248' },
-              { label: 'OpenAI',   color: '#10a37f' },
-              { label: 'Vite',     color: '#BD34FE' },
-              { label: 'Bootstrap',color: '#7952B3' },
+              { label: 'React',     color: '#61DAFB' },
+              { label: 'Node.js',   color: '#68A063' },
+              { label: 'MongoDB',   color: '#47A248' },
+              { label: 'OpenAI',    color: '#10a37f' },
+              { label: 'Vite',      color: '#BD34FE' },
+              { label: 'Bootstrap', color: '#7952B3' },
             ].map(({ label, color }) => (
               <span key={label} style={{
                 fontSize: '0.68rem',
@@ -95,30 +145,14 @@ export default function Footer() {
             }}
           >
             {/* Logo Swagger SVG */}
-            <svg
-              width="22"
-              height="22"
-              viewBox="0 0 512 512"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-label="Swagger"
-            >
+            <svg width="22" height="22" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" aria-label="Swagger">
               <rect width="512" height="512" rx="88" fill="#85E646"/>
-              <path
-                fill="#1A1A1A"
-                d="M256 94c-89.4 0-162 72.6-162 162s72.6 162 162 162 162-72.6 162-162S345.4 94 256 94zm0 298c-74.9 0-136-61.1-136-136S181.1 120 256 120s136 61.1 136 136-61.1 136-136 136z"
-              />
-              <path
-                fill="#1A1A1A"
-                d="M241.7 240.4c-9.5-2.5-15.8-4.9-18.9-7.2-3-2.3-4.5-5.4-4.5-9.3 0-4.3 1.9-7.8 5.6-10.5 3.8-2.7 8.8-4 15.1-4 6.6 0 11.8 1.6 15.5 4.7 3.7 3.1 5.7 7.5 5.9 13.1h18.8c-.2-10.4-3.7-18.5-10.6-24.3-6.8-5.8-16.2-8.8-28.1-8.8-11.4 0-20.7 3-27.8 8.9-7.1 5.9-10.7 13.6-10.7 23 0 9.1 3.1 16.3 9.4 21.5 6.2 5.2 16.1 9.3 29.7 12.4 9.8 2.4 16.4 5.1 19.7 8.1 3.3 3 5 7 5 12 0 4.8-2 8.7-6.1 11.6-4 2.9-9.5 4.4-16.3 4.4-7.2 0-13.1-1.8-17.5-5.5-4.4-3.7-6.8-8.9-7.1-15.6h-18.9c.2 11.5 4.2 20.4 12 26.8 7.8 6.4 18.4 9.5 31.7 9.5 12.2 0 21.9-3 29.2-9.1 7.3-6.1 10.9-14.1 10.9-24.1 0-9.9-3.2-17.5-9.5-22.9-6.3-5.3-16.5-9.5-30.5-12.7z"
-              />
+              <path fill="#1A1A1A" d="M256 94c-89.4 0-162 72.6-162 162s72.6 162 162 162 162-72.6 162-162S345.4 94 256 94zm0 298c-74.9 0-136-61.1-136-136S181.1 120 256 120s136 61.1 136 136-61.1 136-136 136z"/>
+              <path fill="#1A1A1A" d="M241.7 240.4c-9.5-2.5-15.8-4.9-18.9-7.2-3-2.3-4.5-5.4-4.5-9.3 0-4.3 1.9-7.8 5.6-10.5 3.8-2.7 8.8-4 15.1-4 6.6 0 11.8 1.6 15.5 4.7 3.7 3.1 5.7 7.5 5.9 13.1h18.8c-.2-10.4-3.7-18.5-10.6-24.3-6.8-5.8-16.2-8.8-28.1-8.8-11.4 0-20.7 3-27.8 8.9-7.1 5.9-10.7 13.6-10.7 23 0 9.1 3.1 16.3 9.4 21.5 6.2 5.2 16.1 9.3 29.7 12.4 9.8 2.4 16.4 5.1 19.7 8.1 3.3 3 5 7 5 12 0 4.8-2 8.7-6.1 11.6-4 2.9-9.5 4.4-16.3 4.4-7.2 0-13.1-1.8-17.5-5.5-4.4-3.7-6.8-8.9-7.1-15.6h-18.9c.2 11.5 4.2 20.4 12 26.8 7.8 6.4 18.4 9.5 31.7 9.5 12.2 0 21.9-3 29.2-9.1 7.3-6.1 10.9-14.1 10.9-24.1 0-9.9-3.2-17.5-9.5-22.9-6.3-5.3-16.5-9.5-30.5-12.7z"/>
             </svg>
             <div>
-              <p className="mb-0 fw-semibold" style={{ fontSize: '0.8rem', color: '#85E646' }}>
-                Swagger UI
-              </p>
-              <p className="mb-0" style={{ fontSize: '0.7rem', color: 'var(--st-muted)' }}>
-                Ver documentación API
-              </p>
+              <p className="mb-0 fw-semibold" style={{ fontSize: '0.8rem', color: '#85E646' }}>Swagger UI</p>
+              <p className="mb-0" style={{ fontSize: '0.7rem', color: 'var(--st-muted)' }}>Ver documentación API</p>
             </div>
             <i className="bi bi-box-arrow-up-right ms-1" style={{ color: 'var(--st-muted)', fontSize: '0.7rem' }} />
           </a>
@@ -126,7 +160,6 @@ export default function Footer() {
           <p style={{ color: 'var(--st-muted)', fontSize: '0.72rem', marginTop: 6 }}>
             OpenAPI 3.0 · 21 endpoints documentados
           </p>
-
         </div>
 
       </div>
