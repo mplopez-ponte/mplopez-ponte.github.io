@@ -33,8 +33,10 @@ export default function Footer() {
             <span className="ia-badge" style={{ fontSize: '0.6rem' }}>IA</span>
           </div>
           <p style={{ color: 'var(--st-muted)', fontSize: '0.78rem', lineHeight: 1.6, maxWidth: 200 }}>
-            Gestor de tareas inteligente con IA. Proyecto Final DAW.
+            Gestor de tareas inteligente con IA para organizar tu día a día de forma eficiente y sencilla.
           </p>
+
+          <img src="https://icon-icons.com/icon/legal-license-mit/157533" alt="MIT License" style={{ width: 64, opacity: 0.6, marginTop: 12 }} />
         </div>
 
         {/* Columna 2 — Stack tecnológico */}
@@ -126,6 +128,7 @@ export default function Footer() {
           <p style={{ color: 'var(--st-muted)', fontSize: '0.72rem', marginTop: 6 }}>
             OpenAPI 3.0 · 21 endpoints documentados
           </p>
+
         </div>
 
       </div>
