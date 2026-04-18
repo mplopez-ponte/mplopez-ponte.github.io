@@ -35,8 +35,10 @@ export default function Footer() {
           <p style={{ color: 'var(--st-muted)', fontSize: '0.78rem', lineHeight: 1.6, maxWidth: 200 }}>
             Gestor de tareas inteligente con IA para organizar tu día a día de forma eficiente y sencilla.
           </p>
+        </div>
 
-          <img src="https://icon-icons.com/icon/legal-license-mit/157533" alt="MIT License" style={{ width: 64, opacity: 0.6, marginTop: 12 }} />
+        <div>
+          <img src="https://icon-icons.com/icon/legal-license-mit/157533" alt="MIT License" style={{ width: 48, opacity: 0.6 }} />
         </div>
 
         {/* Columna 2 — Stack tecnológico */}
