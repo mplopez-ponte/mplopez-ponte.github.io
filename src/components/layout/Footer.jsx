@@ -1,141 +1,183 @@
-import React, { useState } from 'react';
-import { Outlet, NavLink, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
-import { toast } from 'react-toastify';
-import Footer from './Footer';
+import React from 'react';
 
-export default function Layout() {
-  const { usuario, cerrarSesion } = useAuth();
-  const navigate = useNavigate();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+export default function Footer() {
+  const año = new Date().getFullYear();
 
-  const handleLogout = () => {
-    cerrarSesion();
-    toast.info('Sesión cerrada correctamente');
-    navigate('/login');
-  };
-
-  const navLinks = [
-    { to: '/dashboard', icon: 'bi-grid-1x2-fill', label: 'Dashboard'  },
-    { to: '/tareas',    icon: 'bi-check2-square',  label: 'Mis Tareas' },
-    { to: '/perfil',    icon: 'bi-person-circle',  label: 'Mi Perfil'  },
-  ];
+  const SWAGGER_URL = import.meta.env.VITE_API_URL
+    ? import.meta.env.VITE_API_URL.replace('/api', '/api/docs')
+    : 'http://localhost:5000/api/docs';
 
   return (
-    <div className="d-flex">
+    <footer style={{
+      background: 'var(--st-surface)',
+      borderTop: '1px solid var(--st-border)',
+      padding: '28px 32px 20px',
+      marginTop: 'auto',
+    }}>
+      {/* Fila principal */}
+      <div className="d-flex align-items-start justify-content-between flex-wrap gap-4 mb-4">
 
-      {/* ── Overlay móvil ─────────────────────────────── */}
-      {sidebarOpen && (
-        <div
-          className="position-fixed w-100 h-100 d-md-none"
-          style={{ background: 'rgba(0,0,0,0.6)', zIndex: 99, top: 0, left: 0 }}
-          onClick={() => setSidebarOpen(false)}
-        />
-      )}
-
-      {/* ── Sidebar ───────────────────────────────────── */}
-      <aside className={`st-sidebar ${sidebarOpen ? 'open' : ''}`}>
-
-        {/* Logo */}
-        <div className="p-4 pb-3 border-bottom" style={{ borderColor: 'var(--st-border)' }}>
-          <div className="d-flex align-items-center gap-2">
-            <div
-              className="rounded-2 d-flex align-items-center justify-content-center pulse-glow"
-              style={{ width: 36, height: 36, background: 'var(--st-primary)', fontSize: '1rem' }}
-            >
-              <i className="bi bi-lightning-charge-fill text-white" />
-            </div>
-            <div>
-              <h6 className="mb-0 fw-bold" style={{ fontFamily: 'Space Grotesk', letterSpacing: '-0.01em' }}>
-                SmartTask
-              </h6>
-              <span className="ia-badge">IA</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Navegación */}
-        <nav className="flex-grow-1 p-3">
-          <p className="text-uppercase mb-2" style={{ color: 'var(--st-muted)', fontSize: '0.68rem', letterSpacing: '0.1em', fontWeight: 600 }}>
-            Navegación
-          </p>
-          {navLinks.map(({ to, icon, label }) => (
-            <NavLink
-              key={to}
-              to={to}
-              className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`}
-              onClick={() => setSidebarOpen(false)}
-            >
-              <i className={`bi ${icon}`} />
-              {label}
-            </NavLink>
-          ))}
-        </nav>
-
-        {/* Usuario + cerrar sesión */}
-        <div className="p-3 border-top" style={{ borderColor: 'var(--st-border)' }}>
+        {/* Columna 1 — Logo + descripción */}
+        <div style={{ minWidth: 180 }}>
           <div className="d-flex align-items-center gap-2 mb-2">
             <div
-              className="rounded-circle d-flex align-items-center justify-content-center fw-bold"
-              style={{ width: 34, height: 34, background: 'rgba(99,102,241,0.2)', color: 'var(--st-primary)', fontSize: '0.85rem' }}
+              className="rounded-2 d-flex align-items-center justify-content-center flex-shrink-0"
+              style={{ width: 28, height: 28, background: 'var(--st-primary)' }}
             >
-              {usuario?.nombre?.charAt(0).toUpperCase()}
+              <i className="bi bi-lightning-charge-fill text-white" style={{ fontSize: '0.75rem' }} />
             </div>
-            <div className="overflow-hidden">
-              <p className="mb-0 fw-semibold text-truncate" style={{ fontSize: '0.85rem' }}>{usuario?.nombre}</p>
-              <p className="mb-0 text-truncate" style={{ fontSize: '0.72rem', color: 'var(--st-muted)' }}>{usuario?.email}</p>
-            </div>
+            <span className="fw-bold" style={{ fontFamily: 'Space Grotesk', fontSize: '0.95rem' }}>
+              SmartTask IA
+            </span>
+            <span className="ia-badge" style={{ fontSize: '0.6rem' }}>IA</span>
           </div>
-          <button
-            className="btn btn-sm w-100 d-flex align-items-center gap-2"
-            onClick={handleLogout}
+          <p style={{ color: 'var(--st-muted)', fontSize: '0.78rem', lineHeight: 1.6, maxWidth: 200 }}>
+            Gestor de tareas inteligente con IA para organizar tu día a día de forma eficiente y sencilla.
+          </p>
+
+          {/* MIT License Badge */}
+          <a
+            href="https://opensource.org/licenses/MIT"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Licencia MIT"
+            className="d-inline-flex align-items-center gap-2 text-decoration-none mt-1"
             style={{
-              background: 'rgba(239,68,68,0.1)',
-              color: '#f87171',
-              border: '1px solid rgba(239,68,68,0.2)',
+              background: 'rgba(255,255,255,0.04)',
+              border: '1px solid var(--st-border)',
               borderRadius: 'var(--st-radius-sm)',
+              padding: '5px 10px',
+              transition: 'all 0.2s',
+            }}
+            onMouseEnter={e => {
+              e.currentTarget.style.background = 'rgba(255,255,255,0.08)';
+              e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)';
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.background = 'rgba(255,255,255,0.04)';
+              e.currentTarget.style.borderColor = 'var(--st-border)';
             }}
           >
-            <i className="bi bi-box-arrow-right" />
-            Cerrar sesión
-          </button>
-        </div>
-      </aside>
-
-      {/* ── Contenido principal ───────────────────────── */}
-      {/* d-flex flex-column + min-height 100vh garantiza que el footer
-          siempre quede pegado al fondo aunque la página tenga poco contenido */}
-      <main className="st-main flex-grow-1 d-flex flex-column" style={{ minHeight: '100vh' }}>
-
-        {/* Topbar móvil */}
-        <div
-          className="d-flex d-md-none align-items-center justify-content-between p-3 border-bottom"
-          style={{ background: 'var(--st-surface)', borderColor: 'var(--st-border)' }}
-        >
-          <div className="d-flex align-items-center gap-2">
-            <div
-              className="rounded-2 d-flex align-items-center justify-content-center"
-              style={{ width: 30, height: 30, background: 'var(--st-primary)' }}
+            {/* MIT Logo SVG */}
+            <svg
+              width="28"
+              height="14"
+              viewBox="0 0 60 28"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-label="MIT License"
             >
-              <i className="bi bi-lightning-charge-fill text-white" style={{ fontSize: '0.85rem' }} />
-            </div>
-            <span className="fw-bold" style={{ fontFamily: 'Space Grotesk' }}>SmartTask IA</span>
-          </div>
-          <button
-            className="btn btn-sm"
-            onClick={() => setSidebarOpen(true)}
-            style={{ background: 'var(--st-surface2)', color: 'var(--st-text)', border: '1px solid var(--st-border)' }}
-          >n
-            <i className="bi bi-list fs-5" />
-          </button>
+              <rect width="60" height="28" rx="4" fill="#A31F34"/>
+              <text
+                x="50%"
+                y="50%"
+                dominantBaseline="central"
+                textAnchor="middle"
+                fill="white"
+                fontFamily="Arial, sans-serif"
+                fontWeight="bold"
+                fontSize="13"
+                letterSpacing="1"
+              >
+                MIT
+              </text>
+            </svg>
+            <span style={{ color: 'var(--st-muted)', fontSize: '0.7rem', fontWeight: 500 }}>
+              Licencia MIT
+            </span>
+          </a>
         </div>
 
-        {/* Página activa — flex-grow-1 empuja el footer hacia abajo */}
-        <div className="p-3 p-md-4 flex-grow-1">
-          <Outlet />
+        {/* Columna 2 — Stack tecnológico */}
+        <div style={{ minWidth: 140 }}>
+          <p className="mb-2 fw-semibold" style={{ fontSize: '0.78rem', color: 'var(--st-text)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+            Tecnologías
+          </p>
+          <div className="d-flex flex-wrap gap-2">
+            {[
+              { label: 'React',     color: '#61DAFB' },
+              { label: 'Node.js',   color: '#68A063' },
+              { label: 'MongoDB',   color: '#47A248' },
+              { label: 'OpenAI',    color: '#10a37f' },
+              { label: 'Vite',      color: '#BD34FE' },
+              { label: 'Bootstrap', color: '#7952B3' },
+            ].map(({ label, color }) => (
+              <span key={label} style={{
+                fontSize: '0.68rem',
+                fontWeight: 600,
+                padding: '2px 8px',
+                borderRadius: 20,
+                background: color + '18',
+                color,
+                border: `1px solid ${color}30`,
+              }}>
+                {label}
+              </span>
+            ))}
+          </div>
         </div>
-        
-        </main>
-    </div>
+
+        {/* Columna 3 — Documentación Swagger */}
+        <div style={{ minWidth: 180 }}>
+          <p className="mb-2 fw-semibold" style={{ fontSize: '0.78rem', color: 'var(--st-text)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+            Documentación API
+          </p>
+
+          <a
+            href={SWAGGER_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="d-flex align-items-center gap-2 text-decoration-none mb-2"
+            style={{
+              background: 'rgba(133,230,70,0.08)',
+              border: '1px solid rgba(133,230,70,0.25)',
+              borderRadius: 'var(--st-radius-sm)',
+              padding: '8px 14px',
+              transition: 'all 0.2s',
+              width: 'fit-content',
+            }}
+            onMouseEnter={e => {
+              e.currentTarget.style.background = 'rgba(133,230,70,0.15)';
+              e.currentTarget.style.borderColor = 'rgba(133,230,70,0.5)';
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.background = 'rgba(133,230,70,0.08)';
+              e.currentTarget.style.borderColor = 'rgba(133,230,70,0.25)';
+            }}
+          >
+            {/* Logo Swagger SVG */}
+            <svg width="22" height="22" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" aria-label="Swagger">
+              <rect width="512" height="512" rx="88" fill="#85E646"/>
+              <path fill="#1A1A1A" d="M256 94c-89.4 0-162 72.6-162 162s72.6 162 162 162 162-72.6 162-162S345.4 94 256 94zm0 298c-74.9 0-136-61.1-136-136S181.1 120 256 120s136 61.1 136 136-61.1 136-136 136z"/>
+              <path fill="#1A1A1A" d="M241.7 240.4c-9.5-2.5-15.8-4.9-18.9-7.2-3-2.3-4.5-5.4-4.5-9.3 0-4.3 1.9-7.8 5.6-10.5 3.8-2.7 8.8-4 15.1-4 6.6 0 11.8 1.6 15.5 4.7 3.7 3.1 5.7 7.5 5.9 13.1h18.8c-.2-10.4-3.7-18.5-10.6-24.3-6.8-5.8-16.2-8.8-28.1-8.8-11.4 0-20.7 3-27.8 8.9-7.1 5.9-10.7 13.6-10.7 23 0 9.1 3.1 16.3 9.4 21.5 6.2 5.2 16.1 9.3 29.7 12.4 9.8 2.4 16.4 5.1 19.7 8.1 3.3 3 5 7 5 12 0 4.8-2 8.7-6.1 11.6-4 2.9-9.5 4.4-16.3 4.4-7.2 0-13.1-1.8-17.5-5.5-4.4-3.7-6.8-8.9-7.1-15.6h-18.9c.2 11.5 4.2 20.4 12 26.8 7.8 6.4 18.4 9.5 31.7 9.5 12.2 0 21.9-3 29.2-9.1 7.3-6.1 10.9-14.1 10.9-24.1 0-9.9-3.2-17.5-9.5-22.9-6.3-5.3-16.5-9.5-30.5-12.7z"/>
+            </svg>
+            <div>
+              <p className="mb-0 fw-semibold" style={{ fontSize: '0.8rem', color: '#85E646' }}>Swagger UI</p>
+              <p className="mb-0" style={{ fontSize: '0.7rem', color: 'var(--st-muted)' }}>Ver documentación API</p>
+            </div>
+            <i className="bi bi-box-arrow-up-right ms-1" style={{ color: 'var(--st-muted)', fontSize: '0.7rem' }} />
+          </a>
+
+          <p style={{ color: 'var(--st-muted)', fontSize: '0.72rem', marginTop: 6 }}>
+            OpenAPI 3.0 · 21 endpoints documentados
+          </p>
+        </div>
+
+      </div>
+
+      {/* Línea divisoria */}
+      <div style={{ borderTop: '1px solid var(--st-border)', paddingTop: 16 }}>
+        <div className="d-flex align-items-center justify-content-between flex-wrap gap-2">
+          <p className="mb-0" style={{ color: 'var(--st-muted)', fontSize: '0.75rem' }}>
+            © {año} SmartTask IA — Proyecto Final CFGS Desarrollo de Aplicaciones Web
+          </p>
+          <p className="mb-0 d-flex align-items-center gap-1" style={{ color: 'var(--st-muted)', fontSize: '0.75rem' }}>
+            Desarrollado con
+            <i className="bi bi-heart-fill" style={{ color: '#ef4444', fontSize: '0.65rem' }} />
+            React + Node.js
+          </p>
+        </div>
+      </div>
+
+    </footer>
   );
 }
