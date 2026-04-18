@@ -134,7 +134,7 @@ export default function Layout() {
         <div className="p-3 p-md-4 flex-grow-1">
           <Outlet />
         </div>
-        <Footer />
+        
         </main>
     </div>
   );
