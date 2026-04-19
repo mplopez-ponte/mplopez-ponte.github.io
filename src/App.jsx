@@ -15,6 +15,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'react-toastify/dist/ReactToastify.css';
 import './index.css';
+import Footer from './components/layout/Footer';
 
 // Ruta protegida
 const RutaPrivada = ({ children }) => {
@@ -69,7 +70,7 @@ function App() {
           theme="dark"
         />
       </BrowserRouter>
-        
+        <Footer />
     </AuthProvider>
     
   );
