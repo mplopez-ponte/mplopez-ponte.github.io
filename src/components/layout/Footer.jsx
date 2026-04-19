@@ -1,4 +1,4 @@
-// Footer.jsx - Footer GLOBAL para TODO el proyecto SmartTask IA
+// Footer.jsx - Footer GLOBAL con LOGO MIT RESPONSIVO y optimizado
 import React from 'react';
 
 export default function Footer() {
@@ -16,9 +16,10 @@ export default function Footer() {
       <div className="container">
         <div className="row align-items-center g-3 g-md-4">
           
-          {/* Columna 1: Logo + Nombre + MIT */}
+          {/* Columna 1: Logo SmartTask + MIT RESPONSIVO */}
           <div className="col-md-4 col-lg-3">
-            <div className="d-flex align-items-center gap-2 mb-2 mb-md-0">
+            <div className="d-flex align-items-center gap-2 mb-3">
+              {/* Logo SmartTask */}
               <div
                 className="rounded-2 d-flex align-items-center justify-content-center flex-shrink-0 pulse-glow"
                 style={{ 
@@ -41,24 +42,49 @@ export default function Footer() {
               </div>
             </div>
 
-            {/* Licencia MIT */}
-            <div className="d-flex align-items-center gap-2 mt-2">
-              <span 
-                className="d-flex align-items-center gap-1 px-2 py-1 rounded-pill fw-semibold"
-                style={{
-                  fontSize: '0.7rem',
-                  background: 'rgba(16,185,129,0.12)',
-                  color: '#059669',
-                  border: '1px solid rgba(16,185,129,0.25)',
+            {/* LOGO MIT RESPONSIVO - Perfectamente adaptado al espacio */}
+            <div className="d-flex align-items-center gap-2 flex-wrap">
+              {/* SVG MIT oficial - Tamaño RESPONSIVO */}
+              <svg 
+                className="mit-logo-responsive"
+                width="clamp(20px, 4vw, 24px)"
+                height="clamp(10px, 2vw, 13px)"
+                viewBox="0 0 321 166"
+                fill="none"
+                style={{ 
+                  flexShrink: 0,
+                  filter: 'brightness(0) saturate(100%) invert(28%) sepia(68%) saturate(6200%) hue-rotate(246deg) brightness(92%) contrast(106%)'
                 }}
-                title="Licencia MIT - https://www.svgrepo.com/download/444064/legal-license-mit.svg"
+                title="MIT License - opensource.org/license/mit"
               >
-                <i className="bi bi-shield-check" style={{ fontSize: '0.65rem' }} />
-                MIT
-              </span>
-              <span className="text-muted" style={{ fontSize: '0.7rem' }}>
-                © {año}
-              </span>
+                {/* M roja */}
+                <rect x="0" y="0" width="107" height="166" fill="#A31F34" rx="2"/>
+                {/* I gris */}
+                <rect x="107" y="166" width="53" height="83" fill="#666666" rx="2" transform="rotate(-90 107 166)"/>
+                {/* T roja */}
+                <rect x="160" y="0" width="161" height="166" fill="#A31F34" rx="2"/>
+              </svg>
+
+              {/* Badge + Copyright */}
+              <div className="d-flex align-items-center gap-2 flex-wrap">
+                <span 
+                  className="d-inline-flex align-items-center gap-1 px-2 py-1 rounded-pill fw-semibold"
+                  style={{
+                    fontSize: 'clamp(0.65rem, 2.5vw, 0.7rem)',
+                    background: 'rgba(16,185,129,0.12)',
+                    color: '#059669',
+                    border: '1px solid rgba(16,185,129,0.25)',
+                  }}
+                >
+                  <i className="bi bi-shield-check" style={{ fontSize: '0.65rem' }} />
+                  MIT
+                </span>
+                <small className="text-muted" style={{ 
+                  fontSize: 'clamp(0.65rem, 2.5vw, 0.7rem)' 
+                }}>
+                  © {año}
+                </small>
+              </div>
             </div>
           </div>
 
@@ -66,7 +92,7 @@ export default function Footer() {
           <div className="col-md-4 col-lg-4 text-center text-md-start">
             <p className="mb-1 mb-md-0 small" style={{ 
               color: 'var(--st-muted)', 
-              fontSize: '0.8rem',
+              fontSize: 'clamp(0.75rem, 2vw, 0.8rem)',
               lineHeight: 1.4
             }}>
               Plataforma de gestión inteligente de tareas con IA. 
@@ -83,9 +109,9 @@ export default function Footer() {
 
           {/* Columna 3: Stack + Swagger */}
           <div className="col-md-4 col-lg-5 text-end">
-            <div className="d-flex align-items-center justify-content-end justify-content-md-end gap-1 gap-md-2 flex-wrap">
+            <div className="d-flex align-items-center justify-content-end gap-1 gap-md-2 flex-wrap">
               
-              {/* Stack Tecnológico */}
+              {/* Stack Tecnológico RESPONSIVO */}
               {[
                 { label: 'React', color: '#61DAFB' },
                 { label: 'Node.js', color: '#68A063' },
@@ -96,29 +122,32 @@ export default function Footer() {
                   key={label}
                   className="badge-tech px-2 py-1 rounded-pill fw-semibold"
                   style={{
-                    fontSize: '0.7rem',
+                    fontSize: 'clamp(0.65rem, 2vw, 0.7rem)',
                     background: `${color}18`,
                     color,
                     border: `1px solid ${color}30`,
                     letterSpacing: '0.02em',
-                    whiteSpace: 'nowrap'
+                    whiteSpace: 'nowrap',
+                    cursor: 'default'
                   }}
+                  title={`${label} Technology`}
                 >
                   {label}
                 </span>
               ))}
 
-              {/* Swagger API Docs */}
+              {/* Swagger API Docs RESPONSIVO */}
               <a
-                href="https://smarttask-ia-backend-production.up.railway.app/api/docs/" // Cambia por tu URL de Swagger
+                href="http://localhost:5000/api-docs"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn btn-sm btn-outline-primary px-3 py-1 ms-2 d-none d-md-inline-flex align-items-center gap-1 fw-semibold"
                 style={{
-                  fontSize: '0.75rem',
+                  fontSize: 'clamp(0.7rem, 1.8vw, 0.75rem)',
                   borderRadius: '20px',
                   borderColor: 'var(--st-primary)',
-                  color: 'var(--st-primary)'
+                  color: 'var(--st-primary)',
+                  textDecoration: 'none'
                 }}
               >
                 <i className="bi bi-book-code" />
@@ -126,7 +155,6 @@ export default function Footer() {
               </a>
             </div>
           </div>
-
         </div>
       </div>
 
@@ -142,17 +170,30 @@ export default function Footer() {
           font-size: 0.6rem !important;
           font-weight: 600 !important;
         }
+        .mit-logo-responsive {
+          transition: all 0.2s ease;
+        }
+        .mit-logo-responsive:hover {
+          transform: scale(1.1);
+          filter: brightness(1.1) contrast(1.1);
+        }
         .badge-tech:hover {
           transform: translateY(-1px);
           box-shadow: 0 2px 8px rgba(0,0,0,0.15);
         }
-        @media (max-width: 768px) {
+        @media (max-width: 576px) {
           .st-footer-global {
-            padding: 1rem 0.75rem;
+            padding: 1rem 0.5rem;
           }
-          .badge-tech {
-            font-size: 0.65rem !important;
-            padding: 0.25rem 0.5rem !important;
+          .mit-logo-responsive {
+            width: 18px !important;
+            height: 9px !important;
+          }
+        }
+        @media (min-width: 768px) {
+          .mit-logo-responsive {
+            width: 24px !important;
+            height: 13px !important;
           }
         }
       `}</style>
