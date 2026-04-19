@@ -69,7 +69,9 @@ function App() {
           theme="dark"
         />
       </BrowserRouter>
+        
     </AuthProvider>
+    
   );
 }
 
