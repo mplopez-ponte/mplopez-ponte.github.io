@@ -206,8 +206,6 @@ export default function Layout() {
             <Outlet />
           </div>
           
-          {/* Footer PEGADO al fondo */}
-          <Footer />
         </main>
       </div>
 
