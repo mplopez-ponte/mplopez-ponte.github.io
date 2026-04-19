@@ -51,7 +51,7 @@ export default function Footer() {
                   color: '#059669',
                   border: '1px solid rgba(16,185,129,0.25)',
                 }}
-                title="Licencia MIT - https://opensource.org/license/mit"
+                title="Licencia MIT - https://www.svgrepo.com/download/444064/legal-license-mit.svg"
               >
                 <i className="bi bi-shield-check" style={{ fontSize: '0.65rem' }} />
                 MIT
@@ -110,7 +110,7 @@ export default function Footer() {
 
               {/* Swagger API Docs */}
               <a
-                href="http://localhost:5000/api-docs" // Cambia por tu URL de Swagger
+                href="https://smarttask-ia-backend-production.up.railway.app/api/docs/" // Cambia por tu URL de Swagger
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn btn-sm btn-outline-primary px-3 py-1 ms-2 d-none d-md-inline-flex align-items-center gap-1 fw-semibold"
