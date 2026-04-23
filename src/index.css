@@ -1,5 +1,5 @@
 /* ============================================
-   SmartTask IA - Estilos Globales
+   SmartTask IA — Estilos Globales
    ============================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
@@ -21,6 +21,7 @@
   --st-radius-sm:  8px;
   --st-shadow:     0 4px 24px rgba(0,0,0,0.4);
   --st-shadow-lg:  0 8px 48px rgba(0,0,0,0.6);
+  --st-sidebar-w:  260px;
 
   /* Prioridades */
   --prior-baja:    #10b981;
@@ -29,7 +30,13 @@
   --prior-urgente: #ef4444;
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+/* ─── Reset base ─── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
+}
 
 body {
   font-family: 'Inter', sans-serif;
@@ -37,6 +44,7 @@ body {
   color: var(--st-text);
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -50,7 +58,116 @@ h1, h2, h3, h4, h5, h6 {
 ::-webkit-scrollbar-thumb { background: var(--st-border); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--st-muted); }
 
-/* ─── Cards ─── */
+/* ============================================
+   LAYOUT PRINCIPAL
+   ============================================ */
+
+/* Contenedor raíz del Layout — sidebar + main */
+.st-layout {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* ─── Sidebar ─── */
+.st-sidebar {
+  width: var(--st-sidebar-w);
+  min-height: 100vh;
+  background: var(--st-surface);
+  border-right: 1px solid var(--st-border);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease;
+  overflow-y: auto;
+}
+
+/* ─── Contenido principal ─── */
+.st-main {
+  margin-left: var(--st-sidebar-w);
+  min-height: 100vh;
+  background: var(--st-bg);
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  width: calc(100% - var(--st-sidebar-w));
+}
+
+/* Área de contenido de cada página — ocupa todo el espacio
+   disponible para que el footer quede siempre al fondo */
+.st-content {
+  flex: 1;
+  padding: 24px 32px;
+  /* Centrado horizontal del contenido con ancho máximo */
+  max-width: 1400px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ============================================
+   PÁGINAS DE AUTH (Login / Registro)
+   Centradas vertical y horizontalmente
+   ============================================ */
+
+.st-auth-page {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--st-bg);
+  padding: 24px 16px;
+}
+
+.st-auth-card {
+  width: 100%;
+  max-width: 440px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Fondo decorativo de las páginas de auth */
+.st-auth-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.st-auth-bg::before {
+  content: '';
+  position: absolute;
+  top: -20%;
+  left: -10%;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(99,102,241,0.08) 0%, transparent 70%);
+}
+
+.st-auth-bg::after {
+  content: '';
+  position: absolute;
+  bottom: -20%;
+  right: -10%;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(34,211,238,0.06) 0%, transparent 70%);
+}
+
+/* ============================================
+   CARDS
+   ============================================ */
+
 .st-card {
   background: var(--st-surface);
   border: 1px solid var(--st-border);
@@ -60,7 +177,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 .st-card:hover { border-color: rgba(99,102,241,0.3); }
 
-/* ─── Botones ─── */
+/* ============================================
+   BOTONES
+   ============================================ */
+
 .btn-primary {
   background: var(--st-primary) !important;
   border-color: var(--st-primary) !important;
@@ -84,7 +204,10 @@ h1, h2, h3, h4, h5, h6 {
   color: #fff !important;
 }
 
-/* ─── Forms ─── */
+/* ============================================
+   FORMULARIOS
+   ============================================ */
+
 .form-control, .form-select {
   background: var(--st-surface2) !important;
   border-color: var(--st-border) !important;
@@ -100,7 +223,17 @@ h1, h2, h3, h4, h5, h6 {
 .form-control::placeholder { color: var(--st-muted) !important; }
 .form-label { color: var(--st-text); font-weight: 500; font-size: 0.875rem; }
 
-/* ─── Badges de prioridad ─── */
+/* Input group */
+.input-group-text {
+  background: var(--st-surface2) !important;
+  border-color: var(--st-border) !important;
+  color: var(--st-muted) !important;
+}
+
+/* ============================================
+   BADGES DE PRIORIDAD Y ESTADO
+   ============================================ */
+
 .badge-prioridad {
   font-size: 0.7rem;
   font-weight: 600;
@@ -109,49 +242,15 @@ h1, h2, h3, h4, h5, h6 {
   padding: 0.3em 0.75em;
   border-radius: 20px;
 }
-.badge-baja    { background: rgba(16,185,129,0.15); color: var(--prior-baja); border: 1px solid rgba(16,185,129,0.3); }
-.badge-media   { background: rgba(59,130,246,0.15); color: var(--prior-media); border: 1px solid rgba(59,130,246,0.3); }
-.badge-alta    { background: rgba(245,158,11,0.15); color: var(--prior-alta); border: 1px solid rgba(245,158,11,0.3); }
-.badge-urgente { background: rgba(239,68,68,0.15); color: var(--prior-urgente); border: 1px solid rgba(239,68,68,0.3); }
+.badge-baja    { background: rgba(16,185,129,0.15); color: var(--prior-baja);    border: 1px solid rgba(16,185,129,0.3); }
+.badge-media   { background: rgba(59,130,246,0.15); color: var(--prior-media);   border: 1px solid rgba(59,130,246,0.3); }
+.badge-alta    { background: rgba(245,158,11,0.15); color: var(--prior-alta);    border: 1px solid rgba(245,158,11,0.3); }
+.badge-urgente { background: rgba(239,68,68,0.15);  color: var(--prior-urgente); border: 1px solid rgba(239,68,68,0.3);  }
 
-/* ─── Badges de estado ─── */
-.badge-pendiente    { background: rgba(100,116,139,0.15); color: #94a3b8; border: 1px solid rgba(100,116,139,0.3); }
-.badge-en_progreso  { background: rgba(99,102,241,0.15); color: var(--st-primary); border: 1px solid rgba(99,102,241,0.3); }
-.badge-completada   { background: rgba(16,185,129,0.15); color: var(--st-success); border: 1px solid rgba(16,185,129,0.3); }
-.badge-cancelada    { background: rgba(239,68,68,0.1); color: var(--st-danger); border: 1px solid rgba(239,68,68,0.2); }
-
-/* ─── Sidebar ─── */
-.st-sidebar {
-  width: 260px;
-  min-height: 100vh;
-  background: var(--st-surface);
-  border-right: 1px solid var(--st-border);
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 100;
-  display: flex;
-  flex-direction: column;
-  transition: transform 0.3s ease;
-}
-.st-main { margin-left: 260px; min-height: 100vh; background: var(--st-bg); }
-
-.sidebar-link {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 10px 16px;
-  border-radius: var(--st-radius-sm);
-  color: var(--st-muted);
-  text-decoration: none;
-  font-weight: 500;
-  font-size: 0.9rem;
-  transition: all 0.15s;
-  margin: 2px 0;
-}
-.sidebar-link:hover { color: var(--st-text); background: var(--st-surface2); }
-.sidebar-link.active { color: var(--st-primary); background: rgba(99,102,241,0.1); }
-.sidebar-link i { font-size: 1.1rem; width: 20px; text-align: center; }
+.badge-pendiente   { background: rgba(100,116,139,0.15); color: #94a3b8;             border: 1px solid rgba(100,116,139,0.3); }
+.badge-en_progreso { background: rgba(99,102,241,0.15);  color: var(--st-primary);   border: 1px solid rgba(99,102,241,0.3);  }
+.badge-completada  { background: rgba(16,185,129,0.15);  color: var(--st-success);   border: 1px solid rgba(16,185,129,0.3);  }
+.badge-cancelada   { background: rgba(239,68,68,0.1);    color: var(--st-danger);    border: 1px solid rgba(239,68,68,0.2);   }
 
 /* ─── IA Badge ─── */
 .ia-badge {
@@ -166,7 +265,31 @@ h1, h2, h3, h4, h5, h6 {
   text-transform: uppercase;
 }
 
-/* ─── Progress bar ─── */
+/* ============================================
+   SIDEBAR NAV LINKS
+   ============================================ */
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  border-radius: var(--st-radius-sm);
+  color: var(--st-muted);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: all 0.15s;
+  margin: 2px 0;
+}
+.sidebar-link:hover  { color: var(--st-text); background: var(--st-surface2); }
+.sidebar-link.active { color: var(--st-primary); background: rgba(99,102,241,0.1); }
+.sidebar-link i { font-size: 1.1rem; width: 20px; text-align: center; }
+
+/* ============================================
+   PROGRESS BAR
+   ============================================ */
+
 .progress {
   background: var(--st-border) !important;
   border-radius: 10px !important;
@@ -174,7 +297,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 .progress-bar { border-radius: 10px !important; }
 
-/* ─── Animaciones ─── */
+/* ============================================
+   ANIMACIONES
+   ============================================ */
+
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(16px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -187,18 +313,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 .pulse-glow { animation: pulse-glow 2s infinite; }
 
-/* ─── Toasts ─── */
-.Toastify__toast { border-radius: var(--st-radius-sm) !important; font-family: 'Inter', sans-serif !important; }
-.Toastify__toast-theme--dark { background: var(--st-surface2) !important; border: 1px solid var(--st-border) !important; }
+/* ============================================
+   MODAL
+   ============================================ */
 
-/* ─── Responsive ─── */
-@media (max-width: 768px) {
-  .st-sidebar { transform: translateX(-100%); }
-  .st-sidebar.open { transform: translateX(0); }
-  .st-main { margin-left: 0 !important; }
-}
-
-/* ─── Modal ─── */
 .modal-content {
   background: var(--st-surface) !important;
   border: 1px solid var(--st-border) !important;
@@ -206,13 +324,134 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--st-text) !important;
 }
 .modal-header { border-bottom-color: var(--st-border) !important; }
-.modal-footer { border-top-color: var(--st-border) !important; }
+.modal-footer { border-top-color:    var(--st-border) !important; }
 
-/* ─── Dropdown ─── */
+/* ============================================
+   DROPDOWN
+   ============================================ */
+
 .dropdown-menu {
   background: var(--st-surface2) !important;
   border-color: var(--st-border) !important;
   border-radius: var(--st-radius-sm) !important;
 }
-.dropdown-item { color: var(--st-text) !important; }
+.dropdown-item       { color: var(--st-text) !important; }
 .dropdown-item:hover { background: var(--st-border) !important; }
+
+/* ============================================
+   TOASTS
+   ============================================ */
+
+.Toastify__toast { border-radius: var(--st-radius-sm) !important; font-family: 'Inter', sans-serif !important; }
+.Toastify__toast-theme--dark {
+  background: var(--st-surface2) !important;
+  border: 1px solid var(--st-border) !important;
+}
+
+/* ============================================
+   RESPONSIVE — MÓVIL (max 768px)
+   ============================================ */
+
+@media (max-width: 768px) {
+
+  /* Sidebar oculto fuera de pantalla en móvil */
+  .st-sidebar {
+    transform: translateX(-100%);
+    box-shadow: none;
+  }
+  .st-sidebar.open {
+    transform: translateX(0);
+    box-shadow: var(--st-shadow-lg);
+  }
+
+  /* Main ocupa toda la pantalla en móvil */
+  .st-main {
+    margin-left: 0 !important;
+    width: 100% !important;
+  }
+
+  /* Contenido con menos padding en móvil */
+  .st-content {
+    padding: 16px;
+  }
+
+  /* Auth pages — centrado vertical y horizontal en móvil */
+  .st-auth-page {
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+  }
+
+  .st-auth-card {
+    max-width: 100%;
+  }
+
+  /* Footer — columnas apiladas en móvil */
+  footer .d-flex.align-items-start {
+    flex-direction: column;
+    align-items: center !important;
+    text-align: center;
+  }
+
+  footer .d-flex.align-items-start > div {
+    min-width: unset !important;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* Copyright centrado en móvil */
+  footer .d-flex.align-items-center.justify-content-between {
+    flex-direction: column;
+    align-items: center !important;
+    text-align: center;
+    gap: 8px;
+  }
+
+  /* Badges de tecnologías centrados */
+  footer .d-flex.flex-wrap.gap-2 {
+    justify-content: center;
+  }
+
+  /* Cards a ancho completo en móvil */
+  .st-card {
+    border-radius: var(--st-radius-sm);
+  }
+
+  /* Texto más grande en móvil para legibilidad */
+  .form-control, .form-select {
+    font-size: 16px !important; /* evita zoom automático en iOS */
+  }
+}
+
+/* ============================================
+   RESPONSIVE — TABLET (768px - 992px)
+   ============================================ */
+
+@media (min-width: 769px) and (max-width: 992px) {
+
+  .st-content {
+    padding: 20px 24px;
+  }
+
+  /* Sidebar más estrecho en tablet */
+  .st-sidebar {
+    width: 220px;
+  }
+
+  .st-main {
+    margin-left: 220px;
+    width: calc(100% - 220px);
+  }
+}
+
+/* ============================================
+   RESPONSIVE — DESKTOP GRANDE (min 1400px)
+   ============================================ */
+
+@media (min-width: 1400px) {
+  .st-content {
+    padding: 32px 48px;
+  }
+}
