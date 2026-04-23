@@ -102,7 +102,8 @@ export default function Footer() {
               fontSize: '0.62rem',
               opacity: 0.7
             }}>
-              Proyecto Final DAW • React + Node.js + MongoDB
+              Proyecto Final DAW • React + Node.js + Express + MongoDB
+              Autor: María Paz López Ponte
             </p>
           </div>
 
@@ -113,7 +114,7 @@ export default function Footer() {
               {/* Stack RESPONSIVO PEQUEÑO */}
               {[
                 { label: 'React', color: '#61DAFB' },
-                { label: 'Node', color: '#68A063' },
+                { label: 'Node + Express', color: '#68A063' },
                 { label: 'Mongo', color: '#47A248' },
                 { label: 'OpenAI', color: '#10a37f' },
               ].map(({ label, color }) => (
