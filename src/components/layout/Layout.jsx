@@ -46,12 +46,14 @@ export default function Layout() {
       <aside 
         className={`st-sidebar ${sidebarOpen ? 'open' : ''}`}
         style={{ 
-          width: '260px', 
+          width: 'var(--st-sidebar-w)', 
           minHeight: '100vh',
           background: 'var(--st-surface)',
           borderRight: '1px solid var(--st-border)',
           position: 'fixed',
-          zIndex: 1041,
+          left: 0,
+          top: 0,
+          zIndex: 1041, 
           transform: sidebarOpen ? 'translateX(0)' : 'translateX(-100%)',
           transition: 'transform 0.3s ease-in-out'
         }}
