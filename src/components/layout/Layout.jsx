@@ -1,8 +1,225 @@
 import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
 import { Outlet, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { toast } from 'react-toastify';
 import Footer from './Footer';
+
+const SIDEBAR_W = '260px';
+
+/* Root */
+const LayoutRoot = styled.div`
+  display: flex;
+  min-height: 100vh;
+  overflow-x: hidden;
+`;
+
+/* Overlay móvil */
+const Overlay = styled.div`
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 1040;
+`;
+
+/* Sidebar */
+const Sidebar = styled.aside`
+  width: ${SIDEBAR_W};
+  min-height: 100vh;
+  background: var(--st-surface);
+  border-right: 1px solid var(--st-border);
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 1041;
+  transform: translateX(${props => (props.open ? '0' : '-100%')});
+  transition: transform .25s ease-in-out;
+  will-change: transform;
+  display: flex;
+  flex-direction: column;
+`;
+
+/* Header/logo area inside sidebar */
+const SidebarHeader = styled.div`
+  padding: 1rem 1rem 0.75rem 1rem;
+  border-bottom: 1px solid transparent;
+  border-color: var(--st-border);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+`;
+
+/* Logo circle */
+const LogoCircle = styled.div`
+  width: 40px;
+  height: 40px;
+  background: var(--st-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  font-size: 1.1rem;
+`;
+
+/* Nav */
+const Nav = styled.nav`
+  padding: 1rem;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+`;
+
+/* Section label */
+const SectionLabel = styled.p`
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+  color: var(--st-muted);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+`;
+
+/* NavLink styled */
+const StyledNavLink = styled(NavLink)`
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+  width: 100%;
+  text-decoration: none;
+  transition: all .12s ease;
+  color: var(--st-text);
+  font-size: 0.95rem;
+
+  &.active {
+    background: var(--st-primary);
+    color: white;
+    box-shadow: var(--st-shadow-sm);
+  }
+
+  &:not(.active):hover {
+    background: var(--st-surface2);
+  }
+
+  i { flex-shrink: 0; font-size: 1.1rem; }
+`;
+
+/* User block and logout area */
+const UserBlock = styled.div`
+  padding: 1rem;
+  border-top: 1px solid transparent;
+  border-color: var(--st-border);
+`;
+
+const UserCard = styled.div`
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  padding: 0.75rem;
+  border-radius: 12px;
+  background: rgba(var(--st-primary-rgb), 0.05);
+`;
+
+const Avatar = styled.div`
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(99,102,241,0.15);
+  color: var(--st-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+`;
+
+/* Logout button */
+const LogoutBtn = styled.button`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: rgba(239,68,68,0.1);
+  color: #f87171;
+  border: 1px solid rgba(239,68,68,0.2);
+  border-radius: var(--st-radius-md);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+`;
+
+/* Main area that reserves sidebar space on desktop */
+const Main = styled.div`
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-left: ${SIDEBAR_W};
+  transition: margin-left .25s ease-in-out;
+
+  @media(max-width: 768px) {
+    margin-left: 0;
+  }
+`;
+
+/* Mobile topbar */
+const MobileHeader = styled.header`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--st-border);
+  background: var(--st-surface);
+  padding: 0.75rem 1rem;
+
+  @media(min-width: 769px) {
+    display: none;
+  }
+`;
+
+const TopLeft = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+`;
+
+const MobileLogo = styled.div`
+  width: 36px;
+  height: 36px;
+  background: var(--st-primary);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+/* Content wrapper */
+const ContentWrap = styled.main`
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+`;
+
+const ContentInner = styled.div`
+  flex: 1 1 auto;
+  padding: 1rem;
+  @media(min-width: 768px) {
+    padding: 1.5rem;
+  }
+`;
+
+/* Utility to ensure responsive media inside content */
+const ResponsiveHelpers = styled.div`
+  img, table, .card { max-width: 100%; box-sizing: border-box; }
+`;
+
+/* Optional: small helper for icons inside links */
+const Icon = styled.i`
+  font-size: 1.1rem;
+`;
 
 export default function Layout() {
   const { usuario, cerrarSesion } = useAuth();
@@ -20,7 +237,6 @@ export default function Layout() {
     }
   };
 
-  // Cierra sidebar al cambiar de ruta
   useEffect(() => {
     setSidebarOpen(false);
   }, [location.pathname]);
@@ -32,205 +248,90 @@ export default function Layout() {
   ];
 
   return (
-    <div className="d-flex min-vh-100" style={{ minHeight: '100vh' }}>
-      {/* Overlay móvil */}
-      {sidebarOpen && (
-        <div
-          className="position-fixed w-100 h-100 d-md-none bg-dark bg-opacity-50"
-          style={{ zIndex: 1040, top: 0, left: 0 }}
-          onClick={() => setSidebarOpen(false)}
-        />
-      )}
+    <LayoutRoot>
+      <ResponsiveHelpers />
 
-      {/* Sidebar */}
-      <aside 
-        className={`st-sidebar ${sidebarOpen ? 'open' : ''}`}
-        style={{ 
-          width: 'var(--st-sidebar-w)', 
-          minHeight: '100vh',
-          background: 'var(--st-surface)',
-          borderRight: '1px solid var(--st-border)',
-          position: 'fixed',
-          left: 0,
-          top: 0,
-          zIndex: 1041, 
-          transform: sidebarOpen ? 'translateX(0)' : 'translateX(-100%)',
-          transition: 'transform 0.3s ease-in-out'
-        }}
-      >
-        {/* Logo */}
-        <div className="p-4 pb-3 border-bottom" style={{ borderColor: 'var(--st-border)' }}>
-          <div className="d-flex align-items-center gap-2">
-            <div
-              className="rounded-2 d-flex align-items-center justify-content-center pulse-glow"
-              style={{ 
-                width: 40, 
-                height: 40, 
-                background: 'var(--st-primary)', 
-                fontSize: '1.1rem' 
-              }}
-            >
-              <i className="bi bi-lightning-charge-fill text-white" />
-            </div>
-            <div>
-              <h5 className="mb-0 fw-bold" style={{ 
-                fontFamily: 'Space Grotesk', 
-                letterSpacing: '-0.01em' 
-              }}>
-                SmartTask
-              </h5>
-              <span className="ia-badge" style={{ fontSize: '0.65rem' }}>IA</span>
-            </div>
+      {sidebarOpen && <Overlay onClick={() => setSidebarOpen(false)} />}
+
+      <Sidebar open={sidebarOpen} aria-hidden={!sidebarOpen && window.innerWidth <= 768}>
+        <SidebarHeader>
+          <LogoCircle>
+            <i className="bi bi-lightning-charge-fill" style={{ color: 'white' }} />
+          </LogoCircle>
+          <div>
+            <h5 style={{ margin: 0, fontFamily: 'Space Grotesk', letterSpacing: '-0.01em' }}>SmartTask</h5>
+            <span style={{ fontSize: '0.65rem' }}>IA</span>
           </div>
-        </div>
+        </SidebarHeader>
 
-        {/* Navegación */}
-        <nav className="flex-grow-1 p-4">
-          <p 
-            className="text-uppercase mb-3" 
-            style={{ 
-              color: 'var(--st-muted)', 
-              fontSize: '0.7rem', 
-              letterSpacing: '0.1em', 
-              fontWeight: 600 
-            }}
-          >
-            Navegación
-          </p>
+        <Nav>
+          <SectionLabel>Navegación</SectionLabel>
+
           {navLinks.map(({ to, icon, label }) => (
-            <NavLink
+            <StyledNavLink
               key={to}
               to={to}
-              className={({ isActive }) => 
-                `sidebar-link d-flex align-items-center gap-3 p-3 rounded-2 mb-2 w-100 text-decoration-none transition-all ${
-                  isActive ? 'active bg-primary text-white shadow-sm' : 'text-st-muted hover-bg'
-                }`
-              }
               onClick={() => setSidebarOpen(false)}
-              style={{ fontSize: '0.95rem' }}
             >
-              <i className={`bi ${icon} fs-5 flex-shrink-0`} />
+              <Icon className={`bi ${icon}`} />
               <span>{label}</span>
-            </NavLink>
+            </StyledNavLink>
           ))}
-        </nav>
+        </Nav>
 
-        {/* Usuario + cerrar sesión */}
-        <div className="p-4 border-top" style={{ borderColor: 'var(--st-border)' }}>
-          <div className="d-flex align-items-center gap-3 mb-3 p-3 rounded-3" style={{ 
-            background: 'rgba(var(--st-primary-rgb), 0.05)' 
-          }}>
-            <div
-              className="rounded-circle d-flex align-items-center justify-content-center fw-bold fs-6"
-              style={{ 
-                width: 42, 
-                height: 42, 
-                background: 'rgba(99,102,241,0.15)', 
-                color: 'var(--st-primary)' 
-              }}
-            >
-              {(usuario?.nombre?.[0] || 'U').toUpperCase()}
-            </div>
-            <div className="flex-grow-1 min-w-0">
-              <p className="mb-1 fw-semibold text-truncate" style={{ fontSize: '0.9rem' }}>
+        <UserBlock>
+          <UserCard>
+            <Avatar>{(usuario?.nombre?.[0] || 'U').toUpperCase()}</Avatar>
+            <div style={{ minWidth: 0, flex: 1 }}>
+              <p style={{ margin: 0, fontWeight: 600, fontSize: '0.9rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                 {usuario?.nombre || 'Usuario'}
               </p>
-              <p className="mb-0 text-truncate" style={{ 
-                fontSize: '0.78rem', 
-                color: 'var(--st-muted)' 
-              }}>
+              <p style={{ margin: 0, fontSize: '0.78rem', color: 'var(--st-muted)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                 {usuario?.email || 'user@example.com'}
               </p>
             </div>
-          </div>
-          
-          <button
-            className="btn w-100 d-flex align-items-center gap-2 py-2"
-            onClick={handleLogout}
-            style={{
-              background: 'rgba(239,68,68,0.1)',
-              color: '#f87171',
-              border: '1px solid rgba(239,68,68,0.2)',
-              borderRadius: 'var(--st-radius-md)',
-              fontSize: '0.9rem',
-              fontWeight: 500,
-            }}
-          >
+          </UserCard>
+
+          <LogoutBtn onClick={handleLogout}>
             <i className="bi bi-box-arrow-right" />
-            Cerrar sesión
+            <span>Cerrar sesión</span>
+          </LogoutBtn>
+        </UserBlock>
+      </Sidebar>
+
+      <Main>
+        <MobileHeader>
+          <TopLeft>
+            <MobileLogo>
+              <i className="bi bi-lightning-charge-fill" style={{ color: 'white', fontSize: '0.95rem' }} />
+            </MobileLogo>
+            <span style={{ fontWeight: 700, fontFamily: 'Space Grotesk', fontSize: '1rem' }}>SmartTask IA</span>
+          </TopLeft>
+
+          <button
+            onClick={() => setSidebarOpen(true)}
+            style={{
+              background: 'var(--st-surface2)',
+              color: 'var(--st-text)',
+              border: '1px solid var(--st-border)',
+              borderRadius: 'var(--st-radius-sm)',
+              padding: '0.35rem 0.5rem',
+              cursor: 'pointer'
+            }}
+            aria-label="Abrir menú"
+          >
+            <i className="bi bi-list" style={{ fontSize: '1.1rem' }} />
           </button>
-        </div>
-      </aside>
+        </MobileHeader>
 
-      {/* Contenido principal */}
-      <div className="flex-grow-1 d-flex flex-column w-100" style={{ marginLeft: '260px' }}>
-        {/* Topbar móvil */}
-        <header className="d-md-none border-bottom" style={{ 
-          background: 'var(--st-surface)', 
-          borderColor: 'var(--st-border)' 
-        }}>
-          <div className="d-flex align-items-center justify-content-between p-3">
-            <div className="d-flex align-items-center gap-2">
-              <div
-                className="rounded-2 d-flex align-items-center justify-content-center"
-                style={{ width: 36, height: 36, background: 'var(--st-primary)' }}
-              >
-                <i 
-                  className="bi bi-lightning-charge-fill text-white" 
-                  style={{ fontSize: '0.95rem' }} 
-                />
-              </div>
-              <span 
-                className="fw-bold" 
-                style={{ fontFamily: 'Space Grotesk', fontSize: '1rem' }}
-              >
-                SmartTask IA
-              </span>
-            </div>
-            <button
-              className="btn btn-sm p-2"
-              onClick={() => setSidebarOpen(true)}
-              style={{ 
-                background: 'var(--st-surface2)', 
-                color: 'var(--st-text)', 
-                border: '1px solid var(--st-border)',
-                borderRadius: 'var(--st-radius-sm)'
-              }}
-            >
-              <i className="bi bi-list fs-4" />
-            </button>
-          </div>
-        </header>
-
-        {/* Área de contenido */}
-        <main className="flex-grow-1 d-flex flex-column">
-          <div className="flex-grow-1 p-4 p-md-5">
+        <ContentWrap>
+          <ContentInner>
             <Outlet />
-          </div>
-          
-        </main>
-      </div>
+          </ContentInner>
 
-      {/* Estilos inline críticos para sidebar responsive */}
-      <style jsx>{`
-        @media (max-width: 768px) {
-          .st-sidebar {
-            transform: translateX(-100%) !important;
-          }
-          .st-sidebar.open {
-            transform: translateX(0) !important;
-          }
-          div[style*="marginLeft: '260px'"] {
-            margin-left: 0 !important;
-          }
-        }
-        @media (min-width: 769px) {
-          .st-sidebar {
-            transform: translateX(0) !important;
-            position: relative !important;
-          }
-        }
-      `}</style>
-    </div>
+          <Footer />
+        </ContentWrap>
+      </Main>
+    </LayoutRoot>
   );
 }
