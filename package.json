@@ -15,12 +15,8 @@
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.21.1",
     "react-toastify": "^10.0.4",
-<<<<<<< HEAD
-    "serve": "^14.2.1",
+    "serve": "^14.2.6",
     "styled-components": "^6.4.1"
-=======
-    "serve": "^14.2.6"
->>>>>>> 987bf42d4855a06c31d27fabd216e339bb958783
   },
   "devDependencies": {
     "@types/react": "^18.2.0",
