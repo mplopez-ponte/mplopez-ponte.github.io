@@ -1,21 +1,17 @@
 FROM node:20-alpine AS build
 WORKDIR /app
 
-# Copiar dependencias primero (mejor caché de capas)
 COPY package.json ./
 RUN npm install
 
-# Declarar la variable de build ANTES de copiar el código
+# Variable de build inyectada desde Railway → Variables de entorno del proyecto
 ARG VITE_API_URL
 ENV VITE_API_URL=$VITE_API_URL
 
-# Copiar TODO el código fuente (incluyendo Footer.jsx y Layout.jsx)
 COPY . .
-
-# Construir la aplicación
 RUN npm run build
 
-# ── Imagen final ligera solo con los estáticos ──────────
+# ── Imagen final ──────────────────────────────────────────
 FROM node:20-alpine
 WORKDIR /app
 
@@ -25,4 +21,5 @@ COPY --from=build /app/dist ./dist
 
 EXPOSE 3000
 
-CMD ["sh", "-c", "serve -s dist -l ${PORT:-3000}"]
+# --single redirige TODAS las rutas a index.html (necesario para React Router)
+CMD ["sh", "-c", "serve --single dist -l ${PORT:-3000}"]
