@@ -71,3 +71,21 @@ export const useAuth = () => {
   if (!ctx) throw new Error('useAuth debe usarse dentro de AuthProvider');
   return ctx;
 };
+
+const iniciarSesion = async (email, password) => {
+  const { data } = await axios.post(`${import.meta.env.VITE_API_URL}/auth/login`, { email, password });
+  localStorage.setItem('smarttask_token', data.token);
+  setToken(data.token);
+  setUsuario(data.usuario);
+  axios.defaults.headers.common['Authorization'] = `Bearer ${data.token}`;
+  return data;
+};
+
+const registrar = async (nombre, email, password) => {
+  const { data } = await axios.post(`${import.meta.env.VITE_API_URL}/auth/registro`, { nombre, email, password });
+  localStorage.setItem('smarttask_token', data.token);
+  setToken(data.token);
+  setUsuario(data.usuario);
+  axios.defaults.headers.common['Authorization'] = `Bearer ${data.token}`;
+  return data;
+};
