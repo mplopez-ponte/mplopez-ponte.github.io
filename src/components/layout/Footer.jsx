@@ -103,7 +103,7 @@ export default function Footer() {
               opacity: 0.7
             }}>
               Proyecto Final DAW • React + Node.js Express + MongoDB
-              Autor: María Paz López Ponte <p>{{año}}</p>
+              Autor: María Paz López Ponte 
             </p>
           </div>
 
