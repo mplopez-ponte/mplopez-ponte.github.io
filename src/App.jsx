@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
@@ -39,8 +38,6 @@ const RutaPublica = ({ children }) => {
   return !usuario ? children : <Navigate to="/dashboard" replace />;
 };
 
-=======
->>>>>>> 987bf42d4855a06c31d27fabd216e339bb958783
 function AppRoutes() {
   return (
     <Routes>
