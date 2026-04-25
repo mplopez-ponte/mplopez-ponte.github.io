@@ -5,8 +5,6 @@ import { useAuth } from '../../context/AuthContext';
 import { toast } from 'react-toastify';
 import Footer from './Footer';
 
-const SIDEBAR_W = '260px';
-
 /* Root */
 const LayoutRoot = styled.div`
   display: flex;
@@ -24,7 +22,7 @@ const Overlay = styled.div`
 
 /* Sidebar */
 const Sidebar = styled.aside`
-  width: ${SIDEBAR_W};
+  width: ${props => (props.open ? '250px' : '0')};
   min-height: 100vh;
   background: var(--st-surface);
   border-right: 1px solid var(--st-border);
