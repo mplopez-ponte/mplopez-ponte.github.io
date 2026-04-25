@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { tareaService, iaService } from '../../services/api.service';
 
@@ -16,6 +16,16 @@ export default function ModalCrearTarea({ show, onHide, onCreada }) {
 
   const resetForm = () =>
     setForm({ titulo: '', descripcion: '', prioridad: 'media', categoria: 'General', fechaVencimiento: '', etiquetas: '' });
+
+  // Bloquear scroll del body mientras el modal está abierto
+  useEffect(() => {
+    if (show) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [show]);
 
   /* ── IA: sugiere descripción → POST /ai/sugerir-descripcion ── */
   const handleSugerirDesc = async () => {
@@ -63,33 +73,76 @@ export default function ModalCrearTarea({ show, onHide, onCreada }) {
 
   const handleClose = () => { resetForm(); onHide(); };
 
+  // Cerrar al pulsar Escape
+  useEffect(() => {
+    const handleKeyDown = (e) => { if (e.key === 'Escape' && show) handleClose(); };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [show]);
+
   if (!show) return null;
 
   return (
-    /* Backdrop */
-    <div
-      className="modal show d-block"
-      style={{ background: 'rgba(0,0,0,0.65)', zIndex: 1050, overflowY: 'auto' }}
-      onClick={e => { if (e.target === e.currentTarget) handleClose(); }}
-    >
-      {/* Dialog — ocupa pantalla completa en móvil, centrado en tablet/desktop */}
+    <>
+      {/* ── Backdrop: separado del dialog para no interferir con eventos ── */}
       <div
-        className="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg"
-        style={{ margin: '0.5rem auto', maxWidth: 'min(720px, calc(100vw - 1rem))' }}
+        style={{
+          position: 'fixed',
+          inset: 0,
+          background: 'rgba(0,0,0,0.65)',
+          zIndex: 1050,
+        }}
+        onClick={handleClose}
+        aria-hidden="true"
+      />
+
+      {/* ── Dialog: encima del backdrop, scroll propio ── */}
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-crear-tarea-title"
+        style={{
+          position: 'fixed',
+          inset: 0,
+          zIndex: 1051,           // un nivel por encima del backdrop
+          display: 'flex',
+          alignItems: 'flex-start',
+          justifyContent: 'center',
+          padding: '1rem',
+          overflowY: 'auto',      // scroll aquí, no en el backdrop
+          paddingTop: 'max(1rem, env(safe-area-inset-top))',
+          paddingBottom: 'max(1rem, env(safe-area-inset-bottom))',
+        }}
       >
-        <div className="modal-content">
+        <div
+          className="modal-content"
+          style={{
+            width: '100%',
+            maxWidth: 'min(720px, calc(100vw - 2rem))',
+            margin: 'auto 0',     // centrado vertical cuando hay espacio, pegado arriba cuando no
+          }}
+          // Evita que el clic dentro del card cierre el modal
+          onClick={e => e.stopPropagation()}
+        >
 
           {/* Header */}
           <div className="modal-header">
-            <h5 className="modal-title fw-semibold d-flex align-items-center gap-2">
+            <h5
+              id="modal-crear-tarea-title"
+              className="modal-title fw-semibold d-flex align-items-center gap-2"
+            >
               <i className="bi bi-plus-circle" style={{ color: 'var(--st-primary)' }} />
               Nueva Tarea
             </h5>
-            <button className="btn-close btn-close-white" onClick={handleClose} />
+            <button className="btn-close btn-close-white" onClick={handleClose} aria-label="Cerrar" />
           </div>
 
           <form onSubmit={handleSubmit}>
-            <div className="modal-body">
+            {/* Body con scroll interno si el contenido es largo en pantallas pequeñas */}
+            <div
+              className="modal-body"
+              style={{ overflowY: 'auto', maxHeight: 'calc(100dvh - 200px)' }}
+            >
 
               {/* Título */}
               <div className="mb-3">
@@ -97,10 +150,16 @@ export default function ModalCrearTarea({ show, onHide, onCreada }) {
                   Título <span style={{ color: 'var(--st-danger)' }}>*</span>
                 </label>
                 <input
-                  type="text" name="titulo" className="form-control"
+                  type="text"
+                  name="titulo"
+                  className="form-control"
                   placeholder="¿Qué necesitas hacer?"
-                  required minLength={3} maxLength={100}
-                  value={form.titulo} onChange={handleChange}
+                  required
+                  minLength={3}
+                  maxLength={100}
+                  value={form.titulo}
+                  onChange={handleChange}
+                  autoFocus
                 />
               </div>
 
@@ -109,7 +168,7 @@ export default function ModalCrearTarea({ show, onHide, onCreada }) {
                 <div className="d-flex justify-content-between align-items-center mb-1 gap-2 flex-wrap">
                   <label className="form-label mb-0">Descripción</label>
 
-                  {/* Botón IA → llama a iaService.sugerirDescripcion */}
+                  {/* Llama a iaService.sugerirDescripcion → POST /ai/sugerir-descripcion */}
                   <button
                     type="button"
                     className="btn btn-sm d-flex align-items-center gap-1 flex-shrink-0"
@@ -123,7 +182,7 @@ export default function ModalCrearTarea({ show, onHide, onCreada }) {
                       fontSize: '0.78rem',
                       padding: '4px 12px',
                       borderRadius: 20,
-                      whiteSpace: 'nowrap'
+                      whiteSpace: 'nowrap',
                     }}
                   >
                     {sugirendoDesc
@@ -133,19 +192,28 @@ export default function ModalCrearTarea({ show, onHide, onCreada }) {
                   </button>
                 </div>
                 <textarea
-                  name="descripcion" className="form-control" rows={3} maxLength={1000}
+                  name="descripcion"
+                  className="form-control"
+                  rows={3}
+                  maxLength={1000}
                   placeholder="Describe la tarea en detalle... o deja que la IA lo haga por ti"
-                  value={form.descripcion} onChange={handleChange}
+                  value={form.descripcion}
+                  onChange={handleChange}
                 />
               </div>
 
-              {/* Prioridad · Categoría · Fecha — responsivo */}
+              {/* Prioridad · Categoría · Fecha */}
               <div className="row g-3 mb-3">
                 <div className="col-6 col-md-4">
                   <label className="form-label">
                     Prioridad <span style={{ color: 'var(--st-danger)' }}>*</span>
                   </label>
-                  <select name="prioridad" className="form-select" value={form.prioridad} onChange={handleChange}>
+                  <select
+                    name="prioridad"
+                    className="form-select"
+                    value={form.prioridad}
+                    onChange={handleChange}
+                  >
                     <option value="baja">🟢 Baja</option>
                     <option value="media">🔵 Media</option>
                     <option value="alta">🟡 Alta</option>
@@ -155,7 +223,12 @@ export default function ModalCrearTarea({ show, onHide, onCreada }) {
 
                 <div className="col-6 col-md-4">
                   <label className="form-label">Categoría</label>
-                  <select name="categoria" className="form-select" value={form.categoria} onChange={handleChange}>
+                  <select
+                    name="categoria"
+                    className="form-select"
+                    value={form.categoria}
+                    onChange={handleChange}
+                  >
                     {CATEGORIAS.map(c => <option key={c} value={c}>{c}</option>)}
                   </select>
                 </div>
@@ -165,9 +238,13 @@ export default function ModalCrearTarea({ show, onHide, onCreada }) {
                     Vencimiento <span style={{ color: 'var(--st-danger)' }}>*</span>
                   </label>
                   <input
-                    type="date" name="fechaVencimiento" className="form-control" required
+                    type="date"
+                    name="fechaVencimiento"
+                    className="form-control"
+                    required
                     min={new Date().toISOString().split('T')[0]}
-                    value={form.fechaVencimiento} onChange={handleChange}
+                    value={form.fechaVencimiento}
+                    onChange={handleChange}
                   />
                 </div>
               </div>
@@ -181,22 +258,29 @@ export default function ModalCrearTarea({ show, onHide, onCreada }) {
                   </span>
                 </label>
                 <input
-                  type="text" name="etiquetas" className="form-control"
+                  type="text"
+                  name="etiquetas"
+                  className="form-control"
                   placeholder="ej: react, backend, urgente"
-                  value={form.etiquetas} onChange={handleChange}
+                  value={form.etiquetas}
+                  onChange={handleChange}
                 />
               </div>
             </div>
 
-            {/* Footer */}
-            <div className="modal-footer flex-nowrap gap-2">
+            {/* Footer — siempre visible, nunca se corta */}
+            <div
+              className="modal-footer gap-2"
+              style={{ flexShrink: 0 }}
+            >
               <button
-                type="button" className="btn flex-fill"
+                type="button"
+                className="btn flex-fill"
                 onClick={handleClose}
                 style={{
                   background: 'var(--st-surface2)',
                   color: 'var(--st-muted)',
-                  border: '1px solid var(--st-border)'
+                  border: '1px solid var(--st-border)',
                 }}
               >
                 Cancelar
@@ -216,6 +300,6 @@ export default function ModalCrearTarea({ show, onHide, onCreada }) {
 
         </div>
       </div>
-    </div>
+    </>
   );
 }
