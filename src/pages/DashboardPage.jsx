@@ -15,12 +15,11 @@ ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale,
 
 const MESES = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
 
-// Opciones base para los gráficos (tema oscuro)
 const baseOpts = {
   responsive: true,
   maintainAspectRatio: false,
   plugins: {
-    legend: { labels: { color: '#94a3b8', font: { family: 'Inter', size: 12 }, boxWidth: 12 } }
+    legend: { labels: { color: '#94a3b8', font: { family: 'Inter', size: 11 }, boxWidth: 12 } }
   }
 };
 
@@ -32,9 +31,7 @@ export default function DashboardPage() {
   const [cargandoStats, setCargandoStats] = useState(true);
   const [cargandoIA, setCargandoIA] = useState(false);
 
-  useEffect(() => {
-    cargarDatos();
-  }, []);
+  useEffect(() => { cargarDatos(); }, []);
 
   const cargarDatos = async () => {
     try {
@@ -69,7 +66,6 @@ export default function DashboardPage() {
     </div>
   );
 
-  // ─── Datos para gráficos ─────────────────────────────
   const estadoLabels = { pendiente: 'Pendiente', en_progreso: 'En Progreso', completada: 'Completada', cancelada: 'Cancelada' };
   const estadoColors = ['#64748b','#6366f1','#10b981','#ef4444'];
 
@@ -101,19 +97,15 @@ export default function DashboardPage() {
   const lineData = {
     labels: mesesLabels,
     datasets: [{
-      label: 'Tareas completadas',
+      label: 'Completadas',
       data: stats?.completadasPorMes?.map(m => m.total) || [],
       borderColor: '#6366f1',
       backgroundColor: 'rgba(99,102,241,0.12)',
-      fill: true,
-      tension: 0.4,
-      pointBackgroundColor: '#6366f1',
-      pointRadius: 5,
-      pointHoverRadius: 7
+      fill: true, tension: 0.4,
+      pointBackgroundColor: '#6366f1', pointRadius: 4, pointHoverRadius: 6
     }]
   };
 
-  // Productividad: creadas vs completadas
   const allDays = [...new Set([
     ...(prodData?.creadasPorDia?.map(d => d._id) || []),
     ...(prodData?.completadasPorDia?.map(d => d._id) || [])
@@ -137,21 +129,21 @@ export default function DashboardPage() {
 
   const r = stats?.resumen || {};
   const kpis = [
-    { label: 'Total de tareas',      value: r.total || 0,           icon: 'bi-list-task',        color: '#6366f1' },
-    { label: 'Completadas',          value: r.completadas || 0,     icon: 'bi-check-circle-fill', color: '#10b981' },
-    { label: 'Vencidas',             value: r.vencidas || 0,        icon: 'bi-exclamation-circle',color: '#ef4444' },
-    { label: 'Vencen en 7 días',     value: r.proximasAVencer || 0, icon: 'bi-clock-history',    color: '#f59e0b' },
+    { label: 'Total de tareas',   value: r.total || 0,           icon: 'bi-list-task',         color: '#6366f1' },
+    { label: 'Completadas',       value: r.completadas || 0,     icon: 'bi-check-circle-fill',  color: '#10b981' },
+    { label: 'Vencidas',          value: r.vencidas || 0,        icon: 'bi-exclamation-circle', color: '#ef4444' },
+    { label: 'Vencen en 7 días',  value: r.proximasAVencer || 0, icon: 'bi-clock-history',      color: '#f59e0b' },
   ];
 
   return (
     <div className="fade-in-up">
-      {/* Header */}
+      {/* ── Header ── */}
       <div className="d-flex justify-content-between align-items-start mb-4 flex-wrap gap-3">
         <div>
           <h4 className="mb-1 fw-bold">
             ¡Hola, {usuario?.nombre?.split(' ')[0]}! 👋
           </h4>
-          <p style={{ color: 'var(--st-muted)', fontSize: '0.9rem' }}>
+          <p style={{ color: 'var(--st-muted)', fontSize: '0.9rem', margin: 0 }}>
             Aquí tienes el resumen de tu productividad
           </p>
         </div>
@@ -160,21 +152,21 @@ export default function DashboardPage() {
         </Link>
       </div>
 
-      {/* KPIs */}
+      {/* ── KPIs ── */}
       <div className="row g-3 mb-4">
         {kpis.map((kpi, i) => (
-          <div key={i} className="col-6 col-lg-3">
+          <div key={i} className="col-6 col-xl-3">
             <div className="st-card p-3 h-100">
               <div className="d-flex justify-content-between align-items-start">
-                <div>
-                  <p className="mb-1" style={{ color: 'var(--st-muted)', fontSize: '0.78rem', fontWeight: 500 }}>
+                <div style={{ minWidth: 0 }}>
+                  <p className="mb-1 text-truncate" style={{ color: 'var(--st-muted)', fontSize: '0.78rem', fontWeight: 500 }}>
                     {kpi.label}
                   </p>
                   <h3 className="mb-0 fw-bold">{kpi.value}</h3>
                 </div>
-                <div className="rounded-2 d-flex align-items-center justify-content-center"
-                  style={{ width: 40, height: 40, background: kpi.color + '20' }}>
-                  <i className={`bi ${kpi.icon}`} style={{ color: kpi.color, fontSize: '1.1rem' }} />
+                <div className="rounded-2 d-flex align-items-center justify-content-center flex-shrink-0"
+                  style={{ width: 38, height: 38, background: kpi.color + '20', marginLeft: '0.5rem' }}>
+                  <i className={`bi ${kpi.icon}`} style={{ color: kpi.color, fontSize: '1rem' }} />
                 </div>
               </div>
               {kpi.label === 'Completadas' && (
@@ -193,13 +185,13 @@ export default function DashboardPage() {
         ))}
       </div>
 
-      {/* Gráficos fila 1 */}
+      {/* ── Gráficos fila 1 ── */}
       <div className="row g-3 mb-3">
-        {/* Doughnut - Por estado */}
-        <div className="col-md-4">
+        {/* Doughnut */}
+        <div className="col-12 col-sm-6 col-lg-4">
           <div className="st-card p-3 h-100">
             <h6 className="mb-3 fw-semibold">Por Estado</h6>
-            <div style={{ height: 220 }}>
+            <div className="chart-container-sm" style={{ height: 210 }}>
               <Doughnut data={doughnutData} options={{
                 ...baseOpts,
                 plugins: { ...baseOpts.plugins, legend: { ...baseOpts.plugins.legend, position: 'bottom' } },
@@ -209,17 +201,17 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Bar - Por prioridad */}
-        <div className="col-md-4">
+        {/* Bar */}
+        <div className="col-12 col-sm-6 col-lg-4">
           <div className="st-card p-3 h-100">
             <h6 className="mb-3 fw-semibold">Por Prioridad</h6>
-            <div style={{ height: 220 }}>
+            <div style={{ height: 210 }}>
               <Bar data={barData} options={{
                 ...baseOpts,
                 plugins: { ...baseOpts.plugins, legend: { display: false } },
                 scales: {
-                  x: { ticks: { color: '#94a3b8' }, grid: { color: '#1c2030' } },
-                  y: { ticks: { color: '#94a3b8' }, grid: { color: '#1c2030' } }
+                  x: { ticks: { color: '#94a3b8', font: { size: 11 } }, grid: { color: '#1c2030' } },
+                  y: { ticks: { color: '#94a3b8', font: { size: 11 } }, grid: { color: '#1c2030' } }
                 }
               }} />
             </div>
@@ -227,17 +219,18 @@ export default function DashboardPage() {
         </div>
 
         {/* Por categoría */}
-        <div className="col-md-4">
+        <div className="col-12 col-lg-4">
           <div className="st-card p-3 h-100">
             <h6 className="mb-3 fw-semibold">Por Categoría</h6>
-            <div style={{ overflowY: 'auto', maxHeight: 220 }}>
+            <div style={{ overflowY: 'auto', maxHeight: 210 }}>
               {stats?.porCategoria?.length > 0 ? stats.porCategoria.map((cat, i) => (
                 <div key={i} className="d-flex align-items-center justify-content-between mb-2">
                   <div className="d-flex align-items-center gap-2 overflow-hidden">
                     <div className="rounded-circle flex-shrink-0" style={{ width: 8, height: 8, background: '#6366f1' }} />
                     <span className="text-truncate" style={{ fontSize: '0.83rem' }}>{cat._id}</span>
                   </div>
-                  <span className="badge rounded-pill ms-2" style={{ background: 'rgba(99,102,241,0.2)', color: 'var(--st-primary)', fontSize: '0.72rem' }}>
+                  <span className="badge rounded-pill ms-2 flex-shrink-0"
+                    style={{ background: 'rgba(99,102,241,0.2)', color: 'var(--st-primary)', fontSize: '0.72rem' }}>
                     {cat.total}
                   </span>
                 </div>
@@ -247,10 +240,9 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* Gráficos fila 2 */}
+      {/* ── Gráficos fila 2 ── */}
       <div className="row g-3 mb-3">
-        {/* Line - Completadas por mes */}
-        <div className="col-md-6">
+        <div className="col-12 col-md-6">
           <div className="st-card p-3 h-100">
             <h6 className="mb-3 fw-semibold">Completadas por mes</h6>
             <div style={{ height: 200 }}>
@@ -258,24 +250,23 @@ export default function DashboardPage() {
                 ...baseOpts,
                 plugins: { ...baseOpts.plugins, legend: { display: false } },
                 scales: {
-                  x: { ticks: { color: '#94a3b8' }, grid: { color: '#1c2030' } },
-                  y: { ticks: { color: '#94a3b8' }, grid: { color: '#1c2030' }, beginAtZero: true }
+                  x: { ticks: { color: '#94a3b8', maxTicksLimit: 6, font: { size: 10 } }, grid: { color: '#1c2030' } },
+                  y: { ticks: { color: '#94a3b8', font: { size: 10 } }, grid: { color: '#1c2030' }, beginAtZero: true }
                 }
               }} />
             </div>
           </div>
         </div>
 
-        {/* Line - Productividad últimos 30 días */}
-        <div className="col-md-6">
+        <div className="col-12 col-md-6">
           <div className="st-card p-3 h-100">
             <h6 className="mb-3 fw-semibold">Productividad (últimos 30 días)</h6>
             <div style={{ height: 200 }}>
               <Line data={prodChartData} options={{
                 ...baseOpts,
                 scales: {
-                  x: { ticks: { color: '#94a3b8', maxTicksLimit: 8 }, grid: { color: '#1c2030' } },
-                  y: { ticks: { color: '#94a3b8' }, grid: { color: '#1c2030' }, beginAtZero: true }
+                  x: { ticks: { color: '#94a3b8', maxTicksLimit: 7, font: { size: 10 } }, grid: { color: '#1c2030' } },
+                  y: { ticks: { color: '#94a3b8', font: { size: 10 } }, grid: { color: '#1c2030' }, beginAtZero: true }
                 }
               }} />
             </div>
@@ -283,30 +274,31 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* Panel IA */}
-      <div className="st-card p-4">
+      {/* ── Panel IA ── */}
+      <div className="st-card p-3 p-md-4">
         <div className="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
-          <div className="d-flex align-items-center gap-2">
+          <div className="d-flex align-items-center gap-2 flex-wrap">
             <i className="bi bi-robot" style={{ color: 'var(--st-secondary)', fontSize: '1.2rem' }} />
             <h6 className="mb-0 fw-semibold">Análisis de carga de trabajo</h6>
             <span className="ia-badge">IA</span>
           </div>
           <button className="btn btn-sm d-flex align-items-center gap-2" onClick={handleAnalizarIA} disabled={cargandoIA}
-            style={{ background: 'rgba(99,102,241,0.15)', color: 'var(--st-primary)', border: '1px solid rgba(99,102,241,0.3)', borderRadius: 'var(--st-radius-sm)' }}>
+            style={{ background: 'rgba(99,102,241,0.15)', color: 'var(--st-primary)', border: '1px solid rgba(99,102,241,0.3)', borderRadius: 'var(--st-radius-sm)', whiteSpace: 'nowrap' }}>
             {cargandoIA
-              ? <><span className="spinner-border spinner-border-sm" />Analizando...</>
-              : <><i className="bi bi-magic" />Analizar con IA</>
+              ? <><span className="spinner-border spinner-border-sm" /> Analizando...</>
+              : <><i className="bi bi-magic" /> Analizar con IA</>
             }
           </button>
         </div>
         {analisisIA ? (
-          <div className="p-3 rounded-2" style={{ background: 'rgba(99,102,241,0.08)', border: '1px solid rgba(99,102,241,0.2)', whiteSpace: 'pre-line', fontSize: '0.9rem', lineHeight: 1.7 }}>
+          <div className="p-3 rounded-2"
+            style={{ background: 'rgba(99,102,241,0.08)', border: '1px solid rgba(99,102,241,0.2)', whiteSpace: 'pre-line', fontSize: '0.9rem', lineHeight: 1.7 }}>
             <i className="bi bi-stars me-2" style={{ color: 'var(--st-secondary)' }} />
             {analisisIA}
           </div>
         ) : (
-          <p style={{ color: 'var(--st-muted)', fontSize: '0.875rem' }}>
-            Haz clic en "Analizar con IA" para recibir recomendaciones personalizadas sobre tu carga de trabajo actual.
+          <p style={{ color: 'var(--st-muted)', fontSize: '0.875rem', margin: 0 }}>
+            Haz clic en "Analizar con IA" para recibir recomendaciones personalizadas sobre tu carga de trabajo.
           </p>
         )}
       </div>

@@ -5,218 +5,178 @@ import { useAuth } from '../../context/AuthContext';
 import { toast } from 'react-toastify';
 import Footer from './Footer';
 
-/* Root */
+const SIDEBAR_W = '260px';
+const SIDEBAR_W_TABLET = '220px';
+
 const LayoutRoot = styled.div`
   display: flex;
   min-height: 100vh;
   overflow-x: hidden;
 `;
 
-/* Overlay móvil */
 const Overlay = styled.div`
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.45);
+  background: rgba(0,0,0,0.55);
   z-index: 1040;
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
 `;
 
-/* Sidebar */
 const Sidebar = styled.aside`
-  width: ${props => (props.open ? '250px' : '0')};
+  width: ${SIDEBAR_W};
   min-height: 100vh;
   background: var(--st-surface);
   border-right: 1px solid var(--st-border);
   position: fixed;
-  left: 0;
-  top: 0;
-  bottom: 0;
+  left: 0; top: 0; bottom: 0;
   z-index: 1041;
-  transform: translateX(${props => (props.open ? '0' : '-100%')});
-  transition: transform .25s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.28s cubic-bezier(0.4,0,0.2,1), width 0.28s;
   will-change: transform;
-  display: flex;
-  flex-direction: column;
+
+  @media (min-width: 993px) {
+    transform: translateX(0) !important;
+    width: ${SIDEBAR_W};
+    box-shadow: none;
+  }
+  @media (min-width: 769px) and (max-width: 992px) {
+    width: ${SIDEBAR_W_TABLET};
+    transform: ${props => props.$open ? 'translateX(0)' : 'translateX(-100%)'};
+    box-shadow: ${props => props.$open ? 'var(--st-shadow-lg)' : 'none'};
+  }
+  @media (max-width: 768px) {
+    width: min(${SIDEBAR_W}, 85vw);
+    transform: ${props => props.$open ? 'translateX(0)' : 'translateX(-100%)'};
+    box-shadow: ${props => props.$open ? 'var(--st-shadow-lg)' : 'none'};
+  }
 `;
 
-/* Header/logo area inside sidebar */
 const SidebarHeader = styled.div`
-  padding: 1rem 1rem 0.75rem 1rem;
-  border-bottom: 1px solid transparent;
-  border-color: var(--st-border);
+  padding: 1.1rem 1rem 0.85rem;
+  border-bottom: 1px solid var(--st-border);
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.6rem;
+  flex-shrink: 0;
 `;
 
-/* Logo circle */
 const LogoCircle = styled.div`
-  width: 40px;
-  height: 40px;
+  width: 38px; height: 38px; min-width: 38px;
   background: var(--st-primary);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 8px;
-  font-size: 1.1rem;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 10px; font-size: 1rem;
 `;
 
-/* Nav */
 const Nav = styled.nav`
-  padding: 1rem;
+  padding: 1rem 0.75rem;
   flex: 1 1 auto;
-  display: flex;
-  flex-direction: column;
+  display: flex; flex-direction: column;
+  overflow-y: auto;
 `;
 
-/* Section label */
 const SectionLabel = styled.p`
   text-transform: uppercase;
-  margin-bottom: 0.75rem;
+  margin: 0 0 0.6rem 0.25rem;
   color: var(--st-muted);
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   letter-spacing: 0.1em;
   font-weight: 600;
 `;
 
-/* NavLink styled */
 const StyledNavLink = styled(NavLink)`
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.75rem;
-  border-radius: 8px;
-  margin-bottom: 0.5rem;
-  width: 100%;
-  text-decoration: none;
-  transition: all .12s ease;
-  color: var(--st-text);
-  font-size: 0.95rem;
+  display: flex; align-items: center; gap: 0.75rem;
+  padding: 0.72rem 0.85rem;
+  border-radius: 9px; margin-bottom: 0.3rem;
+  width: 100%; text-decoration: none;
+  transition: background 0.15s, color 0.15s;
+  color: var(--st-text); font-size: 0.92rem; font-weight: 500;
 
   &.active {
-    background: var(--st-primary);
-    color: white;
-    box-shadow: var(--st-shadow-sm);
+    background: var(--st-primary); color: white;
+    box-shadow: 0 2px 12px rgba(99,102,241,0.35);
   }
-
-  &:not(.active):hover {
-    background: var(--st-surface2);
-  }
-
-  i { flex-shrink: 0; font-size: 1.1rem; }
+  &:not(.active):hover { background: var(--st-surface2); color: var(--st-text); }
+  i { flex-shrink: 0; font-size: 1.1rem; width: 20px; text-align: center; }
 `;
 
-/* User block and logout area */
 const UserBlock = styled.div`
-  padding: 1rem;
-  border-top: 1px solid transparent;
-  border-color: var(--st-border);
+  padding: 0.85rem; border-top: 1px solid var(--st-border); flex-shrink: 0;
 `;
 
 const UserCard = styled.div`
-  display: flex;
-  gap: 0.75rem;
-  align-items: center;
-  margin-bottom: 0.75rem;
-  padding: 0.75rem;
-  border-radius: 12px;
-  background: rgba(var(--st-primary-rgb), 0.05);
+  display: flex; gap: 0.65rem; align-items: center;
+  margin-bottom: 0.7rem; padding: 0.65rem 0.75rem;
+  border-radius: 10px; background: rgba(99,102,241,0.06); min-width: 0;
 `;
 
 const Avatar = styled.div`
-  width: 42px;
-  height: 42px;
+  width: 40px; height: 40px; min-width: 40px;
   border-radius: 50%;
-  background: rgba(99,102,241,0.15);
-  color: var(--st-primary);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
+  background: rgba(99,102,241,0.18); color: var(--st-primary);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 1rem;
 `;
 
-/* Logout button */
 const LogoutBtn = styled.button`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  width: 100%; display: flex; align-items: center; gap: 0.5rem;
   padding: 0.5rem 0.75rem;
-  background: rgba(239,68,68,0.1);
-  color: #f87171;
-  border: 1px solid rgba(239,68,68,0.2);
-  border-radius: var(--st-radius-md);
-  font-size: 0.9rem;
-  font-weight: 500;
-  cursor: pointer;
+  background: rgba(239,68,68,0.1); color: #f87171;
+  border: 1px solid rgba(239,68,68,0.25); border-radius: 8px;
+  font-size: 0.875rem; font-weight: 500; cursor: pointer;
+  transition: background 0.15s;
+  &:hover { background: rgba(239,68,68,0.18); }
 `;
 
-/* Main area that reserves sidebar space on desktop */
 const Main = styled.div`
-  flex: 1 1 auto;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  margin-left: ${SIDEBAR_W};
-  transition: margin-left .25s ease-in-out;
+  flex: 1 1 auto; display: flex; flex-direction: column;
+  min-width: 0; width: 100%;
 
-  @media(max-width: 768px) {
-    margin-left: 0;
+  @media (min-width: 993px) {
+    margin-left: ${SIDEBAR_W};
+    width: calc(100% - ${SIDEBAR_W});
   }
+  @media (max-width: 992px) { margin-left: 0; width: 100%; }
 `;
 
-/* Mobile topbar */
 const MobileHeader = styled.header`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  display: flex; align-items: center; justify-content: space-between;
   border-bottom: 1px solid var(--st-border);
   background: var(--st-surface);
-  padding: 0.75rem 1rem;
+  padding: 0.7rem 1rem;
+  position: sticky; top: 0; z-index: 100; flex-shrink: 0;
 
-  @media(min-width: 769px) {
-    display: none;
-  }
-`;
-
-const TopLeft = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  @media (min-width: 993px) { display: none; }
 `;
 
 const MobileLogo = styled.div`
-  width: 36px;
-  height: 36px;
-  background: var(--st-primary);
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 34px; height: 34px; min-width: 34px;
+  background: var(--st-primary); border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
 `;
 
-/* Content wrapper */
+const HamburgerBtn = styled.button`
+  background: var(--st-surface2); color: var(--st-text);
+  border: 1px solid var(--st-border); border-radius: 8px;
+  padding: 0.38rem 0.55rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s;
+  &:hover { background: var(--st-border); }
+`;
+
 const ContentWrap = styled.main`
-  display: flex;
-  flex-direction: column;
-  flex: 1 1 auto;
+  display: flex; flex-direction: column; flex: 1 1 auto; min-width: 0;
 `;
 
 const ContentInner = styled.div`
   flex: 1 1 auto;
-  padding: 1rem;
-  @media(min-width: 768px) {
-    padding: 1.5rem;
-  }
-`;
+  padding: 1.25rem 1rem;
 
-/* Utility to ensure responsive media inside content */
-const ResponsiveHelpers = styled.div`
-  img, table, .card { max-width: 100%; box-sizing: border-box; }
-`;
-
-/* Optional: small helper for icons inside links */
-const Icon = styled.i`
-  font-size: 1.1rem;
+  @media (min-width: 576px)  { padding: 1.5rem 1.25rem; }
+  @media (min-width: 768px)  { padding: 1.75rem 1.5rem; }
+  @media (min-width: 1200px) { padding: 2rem; }
+  @media (min-width: 1400px) { padding: 2.25rem 2.5rem; }
 `;
 
 export default function Layout() {
@@ -230,48 +190,45 @@ export default function Layout() {
       await cerrarSesion();
       toast.info('Sesión cerrada correctamente');
       navigate('/login', { replace: true });
-    } catch (error) {
-      toast.error('Error al cerrar sesión');
-    }
+    } catch { toast.error('Error al cerrar sesión'); }
   };
 
+  useEffect(() => { setSidebarOpen(false); }, [location.pathname]);
+
   useEffect(() => {
-    setSidebarOpen(false);
-  }, [location.pathname]);
+    const isNarrow = window.innerWidth < 993;
+    document.body.style.overflow = (sidebarOpen && isNarrow) ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [sidebarOpen]);
 
   const navLinks = [
     { to: '/dashboard', icon: 'bi-grid-1x2-fill', label: 'Dashboard' },
-    { to: '/tareas', icon: 'bi-check2-square', label: 'Mis Tareas' },
-    { to: '/perfil', icon: 'bi-person-circle', label: 'Mi Perfil' },
+    { to: '/tareas',    icon: 'bi-check2-square',  label: 'Mis Tareas' },
+    { to: '/perfil',    icon: 'bi-person-circle',  label: 'Mi Perfil'  },
   ];
 
   return (
     <LayoutRoot>
-      <ResponsiveHelpers />
+      {sidebarOpen && <Overlay onClick={() => setSidebarOpen(false)} aria-hidden="true" />}
 
-      {sidebarOpen && <Overlay onClick={() => setSidebarOpen(false)} />}
-
-      <Sidebar open={sidebarOpen} aria-hidden={!sidebarOpen && window.innerWidth <= 768}>
+      <Sidebar $open={sidebarOpen} aria-label="Menú de navegación">
         <SidebarHeader>
           <LogoCircle>
             <i className="bi bi-lightning-charge-fill" style={{ color: 'white' }} />
           </LogoCircle>
-          <div>
-            <h5 style={{ margin: 0, fontFamily: 'Space Grotesk', letterSpacing: '-0.01em' }}>SmartTask</h5>
-            <span style={{ fontSize: '0.65rem' }}>IA</span>
+          <div style={{ minWidth: 0 }}>
+            <h5 style={{ margin: 0, fontFamily: 'Space Grotesk', letterSpacing: '-0.01em', fontSize: '1rem', whiteSpace: 'nowrap' }}>
+              SmartTask
+            </h5>
+            <span style={{ fontSize: '0.6rem', color: 'var(--st-muted)' }}>IA · Gestión inteligente</span>
           </div>
         </SidebarHeader>
 
         <Nav>
           <SectionLabel>Navegación</SectionLabel>
-
           {navLinks.map(({ to, icon, label }) => (
-            <StyledNavLink
-              key={to}
-              to={to}
-              onClick={() => setSidebarOpen(false)}
-            >
-              <Icon className={`bi ${icon}`} />
+            <StyledNavLink key={to} to={to} onClick={() => setSidebarOpen(false)}>
+              <i className={`bi ${icon}`} />
               <span>{label}</span>
             </StyledNavLink>
           ))}
@@ -281,15 +238,14 @@ export default function Layout() {
           <UserCard>
             <Avatar>{(usuario?.nombre?.[0] || 'U').toUpperCase()}</Avatar>
             <div style={{ minWidth: 0, flex: 1 }}>
-              <p style={{ margin: 0, fontWeight: 600, fontSize: '0.9rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+              <p style={{ margin: 0, fontWeight: 600, fontSize: '0.875rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                 {usuario?.nombre || 'Usuario'}
               </p>
-              <p style={{ margin: 0, fontSize: '0.78rem', color: 'var(--st-muted)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                {usuario?.email || 'user@example.com'}
+              <p style={{ margin: 0, fontSize: '0.75rem', color: 'var(--st-muted)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                {usuario?.email || ''}
               </p>
             </div>
           </UserCard>
-
           <LogoutBtn onClick={handleLogout}>
             <i className="bi bi-box-arrow-right" />
             <span>Cerrar sesión</span>
@@ -299,34 +255,27 @@ export default function Layout() {
 
       <Main>
         <MobileHeader>
-          <TopLeft>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <MobileLogo>
-              <i className="bi bi-lightning-charge-fill" style={{ color: 'white', fontSize: '0.95rem' }} />
+              <i className="bi bi-lightning-charge-fill" style={{ color: 'white', fontSize: '0.9rem' }} />
             </MobileLogo>
-            <span style={{ fontWeight: 700, fontFamily: 'Space Grotesk', fontSize: '1rem' }}>SmartTask IA</span>
-          </TopLeft>
-
-          <button
+            <span style={{ fontWeight: 700, fontFamily: 'Space Grotesk', fontSize: '0.95rem', letterSpacing: '-0.01em' }}>
+              SmartTask IA
+            </span>
+          </div>
+          <HamburgerBtn
             onClick={() => setSidebarOpen(true)}
-            style={{
-              background: 'var(--st-surface2)',
-              color: 'var(--st-text)',
-              border: '1px solid var(--st-border)',
-              borderRadius: 'var(--st-radius-sm)',
-              padding: '0.35rem 0.5rem',
-              cursor: 'pointer'
-            }}
-            aria-label="Abrir menú"
+            aria-label="Abrir menú de navegación"
+            aria-expanded={sidebarOpen}
           >
-            <i className="bi bi-list" style={{ fontSize: '1.1rem' }} />
-          </button>
+            <i className="bi bi-list" style={{ fontSize: '1.15rem' }} />
+          </HamburgerBtn>
         </MobileHeader>
 
         <ContentWrap>
           <ContentInner>
             <Outlet />
           </ContentInner>
-
           <Footer />
         </ContentWrap>
       </Main>
