@@ -102,7 +102,7 @@ export default function Footer() {
               fontSize: '0.62rem',
               opacity: 0.7
             }}>
-              Proyecto Final DAW • React + Node.js + Express + MongoDB
+              Proyecto Final DAW • React + Node.js Express + MongoDB
               Autor: María Paz López Ponte
             </p>
           </div>
