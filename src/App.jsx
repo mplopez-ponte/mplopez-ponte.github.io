@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
@@ -38,13 +39,16 @@ const RutaPublica = ({ children }) => {
   return !usuario ? children : <Navigate to="/dashboard" replace />;
 };
 
+=======
+>>>>>>> 987bf42d4855a06c31d27fabd216e339bb958783
 function AppRoutes() {
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/dashboard" replace />} />
+      <Route index element={<Navigate to="/dashboard" replace />} />
       <Route path="/login" element={<RutaPublica><LoginPage /></RutaPublica>} />
       <Route path="/registro" element={<RutaPublica><RegisterPage /></RutaPublica>} />
       <Route path="/" element={<RutaPrivada><Layout /></RutaPrivada>}>
+        <Route index element={<Navigate to="dashboard" replace />} />
         <Route path="dashboard" element={<DashboardPage />} />
         <Route path="tareas" element={<TareasPage />} />
         <Route path="tareas/:id" element={<TareaDetallePage />} />
@@ -69,6 +73,7 @@ function App() {
           pauseOnHover
           theme="dark"
         />
+        
       </BrowserRouter>
     </AuthProvider>
   );

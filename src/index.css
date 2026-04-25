@@ -126,7 +126,6 @@ h1, h2, h3, h4, h5, h6 {
   min-height: 100vh;
   background: var(--st-surface);
   border-right: 1px solid var(--st-border);
-  position: fixed;
   top: 0;
   left: 0;
   z-index: 100;
@@ -216,3 +215,121 @@ h1, h2, h3, h4, h5, h6 {
 }
 .dropdown-item { color: var(--st-text) !important; }
 .dropdown-item:hover { background: var(--st-border) !important; }
+
+/* ============================================
+   TOASTS
+   ============================================ */
+ 
+.Toastify__toast { border-radius: var(--st-radius-sm) !important; font-family: 'Inter', sans-serif !important; }
+.Toastify__toast-theme--dark {
+  background: var(--st-surface2) !important;
+  border: 1px solid var(--st-border) !important;
+}
+ 
+/* ============================================
+   RESPONSIVE — MÓVIL (max 768px)
+   ============================================ */
+ 
+@media (max-width: 768px) {
+ 
+  /* Sidebar oculto fuera de pantalla en móvil */
+  .st-sidebar {
+    transform: translateX(-100%);
+    box-shadow: none;
+  }
+  .st-sidebar.open {
+    transform: translateX(0);
+    box-shadow: var(--st-shadow-lg);
+  }
+ 
+  /* Main ocupa toda la pantalla en móvil */
+  .st-main {
+    margin-left: 0 !important;
+    width: 100% !important;
+  }
+ 
+  /* Contenido con menos padding en móvil */
+  .st-content {
+    padding: 16px;
+  }
+ 
+  /* Auth pages — centrado vertical y horizontal en móvil */
+  .st-auth-page {
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+  }
+ 
+  .st-auth-card {
+    max-width: 100%;
+  }
+ 
+  /* Footer — columnas apiladas en móvil */
+  footer .d-flex.align-items-start {
+    flex-direction: column;
+    align-items: center !important;
+    text-align: center;
+  }
+ 
+  footer .d-flex.align-items-start > div {
+    min-width: unset !important;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+ 
+  /* Copyright centrado en móvil */
+  footer .d-flex.align-items-center.justify-content-between {
+    flex-direction: column;
+    align-items: center !important;
+    text-align: center;
+    gap: 8px;
+  }
+ 
+  /* Badges de tecnologías centrados */
+  footer .d-flex.flex-wrap.gap-2 {
+    justify-content: center;
+  }
+ 
+  /* Cards a ancho completo en móvil */
+  .st-card {
+    border-radius: var(--st-radius-sm);
+  }
+ 
+  /* Texto más grande en móvil para legibilidad */
+  .form-control, .form-select {
+    font-size: 16px !important; /* evita zoom automático en iOS */
+  }
+}
+ 
+/* ============================================
+   RESPONSIVE — TABLET (768px - 992px)
+   ============================================ */
+ 
+@media (min-width: 769px) and (max-width: 992px) {
+ 
+  .st-content {
+    padding: 20px 24px;
+  }
+ 
+  /* Sidebar más estrecho en tablet */
+  .st-sidebar {
+    width: 220px;
+  }
+ 
+  .st-main {
+    margin-left: 220px;
+    width: calc(100% - 220px);
+  }
+}
+ 
+/* ============================================
+   RESPONSIVE — DESKTOP GRANDE (min 1400px)
+   ============================================ */
+ 
+@media (min-width: 1400px) {
+  .st-content {
+    padding: 32px 48px;
+  }
+}
