@@ -11,7 +11,6 @@ import TareaDetallePage from './pages/TareaDetallePage';
 import PerfilPage from './pages/PerfilPage';
 import Layout from './components/layout/Layout';
 
-import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'react-toastify/dist/ReactToastify.css';
 import './index.css';
