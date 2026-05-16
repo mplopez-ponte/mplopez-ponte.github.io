@@ -230,8 +230,6 @@ export default function TareasPage() {
   const [pagina, setPagina] = useState(1);
   const [totalPaginas, setTotalPaginas] = useState(1);
   const [vista, setVista] = useState('lista');
-<<<<<<< HEAD
-=======
 
   /* DnD state */
   const [activeId, setActiveId] = useState(null);
@@ -240,7 +238,6 @@ export default function TareasPage() {
 
   /* Evitar múltiples llamadas simultáneas al cambiar estado */
   const actualizandoRef = useRef(false);
->>>>>>> b842be7aff4a015d475c171f2976bc2dd318e802
 
   const cargarTareas = useCallback(async () => {
     setCargando(true);
@@ -381,10 +378,7 @@ export default function TareasPage() {
 
   return (
     <div className="fade-in-up">
-<<<<<<< HEAD
-=======
 
->>>>>>> b842be7aff4a015d475c171f2976bc2dd318e802
       {/* ── Header ── */}
       <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
         <div>
@@ -416,14 +410,10 @@ export default function TareasPage() {
               </button>
             ))}
           </div>
-<<<<<<< HEAD
-          <button className="btn btn-primary d-flex align-items-center gap-2" onClick={() => setShowModal(true)}>
-=======
           <button
             className="btn btn-primary d-flex align-items-center gap-2"
             onClick={() => setShowModal(true)}
           >
->>>>>>> b842be7aff4a015d475c171f2976bc2dd318e802
             <i className="bi bi-plus-lg" />
             <span className="d-none d-sm-inline">Nueva tarea</span>
             <span className="d-sm-none">Nueva</span>
@@ -440,11 +430,6 @@ export default function TareasPage() {
               <span className="input-group-text">
                 <i className="bi bi-search" />
               </span>
-<<<<<<< HEAD
-              <input type="text" className="form-control" placeholder="Buscar tareas..."
-                value={filtros.buscar}
-                onChange={e => { setFiltros({ ...filtros, buscar: e.target.value }); setPagina(1); }} />
-=======
               <input
                 type="text"
                 className="form-control"
@@ -452,7 +437,6 @@ export default function TareasPage() {
                 value={filtros.buscar}
                 onChange={e => { setFiltros({ ...filtros, buscar: e.target.value }); setPagina(1); }}
               />
->>>>>>> b842be7aff4a015d475c171f2976bc2dd318e802
             </div>
           </div>
           {/* Estado */}
@@ -469,19 +453,12 @@ export default function TareasPage() {
               <option value="cancelada">Cancelada</option>
             </select>
           </div>
-<<<<<<< HEAD
-          {/* Prioridad */}
-          <div className="col-5 col-md-3">
-            <select className="form-select" value={filtros.prioridad}
-              onChange={e => { setFiltros({ ...filtros, prioridad: e.target.value }); setPagina(1); }}>
-=======
           <div className="col-5 col-md-3">
             <select
               className="form-select"
               value={filtros.prioridad}
               onChange={e => { setFiltros({ ...filtros, prioridad: e.target.value }); setPagina(1); }}
             >
->>>>>>> b842be7aff4a015d475c171f2976bc2dd318e802
               <option value="">Todas</option>
               <option value="urgente">Urgente</option>
               <option value="alta">Alta</option>
@@ -489,14 +466,6 @@ export default function TareasPage() {
               <option value="baja">Baja</option>
             </select>
           </div>
-<<<<<<< HEAD
-          {/* Limpiar */}
-          <div className="col-1 col-md-1">
-            <button className="btn btn-sm w-100 d-flex align-items-center justify-content-center"
-              onClick={() => { setFiltros({ estado: '', prioridad: '', buscar: '' }); setPagina(1); }}
-              style={{ background: 'var(--st-surface2)', color: 'var(--st-muted)', border: '1px solid var(--st-border)', minHeight: '38px' }}
-              title="Limpiar filtros">
-=======
           <div className="col-1 col-md-1">
             <button
               className="btn btn-sm w-100 d-flex align-items-center justify-content-center"
@@ -509,7 +478,6 @@ export default function TareasPage() {
               }}
               title="Limpiar filtros"
             >
->>>>>>> b842be7aff4a015d475c171f2976bc2dd318e802
               <i className="bi bi-x-lg" />
             </button>
           </div>
@@ -539,23 +507,6 @@ export default function TareasPage() {
                 const dr = getDiasRestantes(tarea.fechaVencimiento);
                 return (
                   <div key={tarea._id} className="st-card p-3">
-<<<<<<< HEAD
-                    {/* Fila principal */}
-                    <div className="d-flex align-items-start gap-3">
-                      {/* Checkbox */}
-                      <div className="form-check mt-1 flex-shrink-0">
-                        <input className="form-check-input" type="checkbox"
-                          checked={tarea.estado === 'completada'}
-                          onChange={() => handleCambiarEstado(tarea._id, tarea.estado === 'completada' ? 'pendiente' : 'completada')}
-                          style={{ width: 18, height: 18, borderColor: 'var(--st-border)', cursor: 'pointer' }} />
-                      </div>
-
-                      {/* Info */}
-                      <div className="flex-grow-1 overflow-hidden">
-                        {/* Título + acciones en la misma fila */}
-                        <div className="d-flex align-items-start justify-content-between gap-2">
-                          <Link to={`/tareas/${tarea._id}`}
-=======
                     <div className="d-flex align-items-start gap-3">
                       <div className="form-check mt-1 flex-shrink-0">
                         <input
@@ -570,27 +521,10 @@ export default function TareasPage() {
                         <div className="d-flex align-items-start justify-content-between gap-2">
                           <Link
                             to={`/tareas/${tarea._id}`}
->>>>>>> b842be7aff4a015d475c171f2976bc2dd318e802
                             className="fw-semibold text-decoration-none"
                             style={{
                               color: tarea.estado === 'completada' ? 'var(--st-muted)' : 'var(--st-text)',
                               textDecoration: tarea.estado === 'completada' ? 'line-through' : 'none',
-<<<<<<< HEAD
-                              wordBreak: 'break-word'
-                            }}>
-                            {tarea.titulo}
-                          </Link>
-                          {/* Acciones */}
-                          <div className="d-flex gap-1 flex-shrink-0">
-                            <Link to={`/tareas/${tarea._id}`} className="btn btn-sm"
-                              style={{ background: 'transparent', border: '1px solid var(--st-border)', color: 'var(--st-muted)', padding: '3px 8px' }}
-                              title="Ver detalle">
-                              <i className="bi bi-eye" />
-                            </Link>
-                            <button className="btn btn-sm" onClick={() => handleEliminar(tarea._id)}
-                              style={{ background: 'transparent', border: '1px solid var(--st-border)', color: '#f87171', padding: '3px 8px' }}
-                              title="Eliminar">
-=======
                               wordBreak: 'break-word',
                             }}
                           >
@@ -611,16 +545,10 @@ export default function TareasPage() {
                               style={{ background: 'transparent', border: '1px solid var(--st-border)', color: '#f87171', padding: '3px 8px' }}
                               title="Eliminar"
                             >
->>>>>>> b842be7aff4a015d475c171f2976bc2dd318e802
                               <i className="bi bi-trash3" />
                             </button>
                           </div>
                         </div>
-<<<<<<< HEAD
-
-                        {/* Badges */}
-=======
->>>>>>> b842be7aff4a015d475c171f2976bc2dd318e802
                         <div className="d-flex gap-1 flex-wrap mt-1 mb-1">
                           <span className={`badge-prioridad badge-${tarea.prioridad}`}>{tarea.prioridad}</span>
                           <span className={`badge-prioridad badge-${tarea.estado}`}>
@@ -628,21 +556,11 @@ export default function TareasPage() {
                           </span>
                           {tarea.subtareasGeneradasPorIA && <span className="ia-badge">IA</span>}
                         </div>
-<<<<<<< HEAD
-
-                        {/* Descripción */}
-=======
->>>>>>> b842be7aff4a015d475c171f2976bc2dd318e802
                         {tarea.descripcion && (
                           <p className="mb-1" style={{ color: 'var(--st-muted)', fontSize: '0.82rem', overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>
                             {tarea.descripcion}
                           </p>
                         )}
-<<<<<<< HEAD
-
-                        {/* Meta */}
-=======
->>>>>>> b842be7aff4a015d475c171f2976bc2dd318e802
                         <div className="d-flex align-items-center gap-2 gap-md-3 flex-wrap">
                           <span style={{ fontSize: '0.78rem', color: dr.color, whiteSpace: 'nowrap' }}>
                             <i className="bi bi-calendar3 me-1" />
@@ -661,10 +579,6 @@ export default function TareasPage() {
                             </span>
                           )}
                         </div>
-<<<<<<< HEAD
-
-=======
->>>>>>> b842be7aff4a015d475c171f2976bc2dd318e802
                         {tarea.progreso > 0 && (
                           <div className="progress mt-2" style={{ height: 4, maxWidth: 200 }}>
                             <div className="progress-bar" style={{ width: `${tarea.progreso}%`, background: 'var(--st-primary)' }} />
@@ -679,47 +593,6 @@ export default function TareasPage() {
         )
       )}
 
-<<<<<<< HEAD
-      {/* ── Vista Kanban ── */}
-      {vista === 'kanban' && !cargando && (
-        <div className="kanban-board">
-          {[
-            { key: 'pendiente',  label: 'Pendiente',   color: '#64748b' },
-            { key: 'en_progreso',label: 'En Progreso',  color: '#6366f1' },
-            { key: 'completada', label: 'Completada',   color: '#10b981' },
-            { key: 'cancelada',  label: 'Cancelada',    color: '#ef4444' }
-          ].map(col => (
-            <div key={col.key} className="kanban-col">
-              <div className="st-card p-2 h-100">
-                <div className="d-flex align-items-center gap-2 p-2 mb-2">
-                  <div style={{ width: 10, height: 10, borderRadius: '50%', background: col.color, flexShrink: 0 }} />
-                  <span className="fw-semibold" style={{ fontSize: '0.85rem' }}>{col.label}</span>
-                  <span className="badge ms-auto rounded-pill"
-                    style={{ background: col.color + '22', color: col.color, fontSize: '0.72rem' }}>
-                    {tareasPorEstado(col.key).length}
-                  </span>
-                </div>
-                <div className="d-flex flex-column gap-2">
-                  {tareasPorEstado(col.key).map(t => (
-                    <Link key={t._id} to={`/tareas/${t._id}`} className="text-decoration-none"
-                      style={{ background: 'var(--st-surface2)', border: '1px solid var(--st-border)', borderRadius: 8, padding: '10px 12px', display: 'block' }}>
-                      <p className="mb-1 fw-semibold" style={{ fontSize: '0.83rem', color: 'var(--st-text)', wordBreak: 'break-word' }}>
-                        {t.titulo}
-                      </p>
-                      <div className="d-flex align-items-center gap-1 flex-wrap">
-                        <span className={`badge-prioridad badge-${t.prioridad}`}>{t.prioridad}</span>
-                        {t.subtareasGeneradasPorIA && <span className="ia-badge">IA</span>}
-                      </div>
-                    </Link>
-                  ))}
-                  {tareasPorEstado(col.key).length === 0 && (
-                    <p style={{ color: 'var(--st-muted)', fontSize: '0.8rem', textAlign: 'center', padding: '16px 0' }}>
-                      Sin tareas
-                    </p>
-                  )}
-                </div>
-              </div>
-=======
       {/* ── Vista Kanban con Drag & Drop ── */}
       {vista === 'kanban' && (
         cargando ? (
@@ -736,7 +609,6 @@ export default function TareasPage() {
               <i className="bi bi-grip-vertical" />
               <span className="d-none d-sm-inline">Arrastra las tarjetas entre columnas para cambiar su estado</span>
               <span className="d-sm-none">Mantén pulsado para arrastrar</span>
->>>>>>> b842be7aff4a015d475c171f2976bc2dd318e802
             </div>
 
             <DndContext
@@ -774,13 +646,8 @@ export default function TareasPage() {
         )
       )}
 
-<<<<<<< HEAD
-      {/* ── Paginación ── */}
-      {totalPaginas > 1 && (
-=======
       {/* ── Paginación (solo vista lista) ── */}
       {vista === 'lista' && totalPaginas > 1 && (
->>>>>>> b842be7aff4a015d475c171f2976bc2dd318e802
         <div className="d-flex justify-content-center gap-2 mt-4">
           <button
             className="btn btn-sm"
@@ -804,15 +671,11 @@ export default function TareasPage() {
         </div>
       )}
 
-<<<<<<< HEAD
-      <ModalCrearTarea show={showModal} onHide={() => setShowModal(false)} onCreada={cargarTareas} />
-=======
       <ModalCrearTarea
         show={showModal}
         onHide={() => setShowModal(false)}
         onCreada={cargarTareas}
       />
->>>>>>> b842be7aff4a015d475c171f2976bc2dd318e802
     </div>
   );
 }
