@@ -18,17 +18,22 @@ const Overlay = styled.div`
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.55);
+  background: rgba(0,0,0,0.55);
   z-index: 1040;
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
   backdrop-filter: blur(2px);
   -webkit-backdrop-filter: blur(2px);
 `;
 
 const Sidebar = styled.aside`
   width: ${SIDEBAR_W};
+  width: ${SIDEBAR_W};
   min-height: 100vh;
   background: var(--st-surface);
   border-right: 1px solid var(--st-border);
   position: fixed;
+  left: 0; top: 0; bottom: 0;
   left: 0; top: 0; bottom: 0;
   z-index: 1041;
   display: flex;
@@ -53,25 +58,55 @@ const Sidebar = styled.aside`
   }
 `;
 
+  transition: transform 0.28s cubic-bezier(0.4,0,0.2,1), width 0.28s;
+  will-change: transform;
+
+  @media (min-width: 993px) {
+    transform: translateX(0) !important;
+    width: ${SIDEBAR_W};
+    box-shadow: none;
+  }
+  @media (min-width: 769px) and (max-width: 992px) {
+    width: ${SIDEBAR_W_TABLET};
+    transform: ${props => props.$open ? 'translateX(0)' : 'translateX(-100%)'};
+    box-shadow: ${props => props.$open ? 'var(--st-shadow-lg)' : 'none'};
+  }
+  @media (max-width: 768px) {
+    width: min(${SIDEBAR_W}, 85vw);
+    transform: ${props => props.$open ? 'translateX(0)' : 'translateX(-100%)'};
+    box-shadow: ${props => props.$open ? 'var(--st-shadow-lg)' : 'none'};
+  }
+`;
+
 const SidebarHeader = styled.div`
+  padding: 1.1rem 1rem 0.85rem;
+  border-bottom: 1px solid var(--st-border);
   padding: 1.1rem 1rem 0.85rem;
   border-bottom: 1px solid var(--st-border);
   display: flex;
   align-items: center;
   gap: 0.6rem;
   flex-shrink: 0;
+  gap: 0.6rem;
+  flex-shrink: 0;
 `;
 
 const LogoCircle = styled.div`
   width: 38px; height: 38px; min-width: 38px;
+  width: 38px; height: 38px; min-width: 38px;
   background: var(--st-primary);
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 10px; font-size: 1rem;
   display: flex; align-items: center; justify-content: center;
   border-radius: 10px; font-size: 1rem;
 `;
 
 const Nav = styled.nav`
   padding: 1rem 0.75rem;
+  padding: 1rem 0.75rem;
   flex: 1 1 auto;
+  display: flex; flex-direction: column;
+  overflow-y: auto;
   display: flex; flex-direction: column;
   overflow-y: auto;
 `;
@@ -79,7 +114,9 @@ const Nav = styled.nav`
 const SectionLabel = styled.p`
   text-transform: uppercase;
   margin: 0 0 0.6rem 0.25rem;
+  margin: 0 0 0.6rem 0.25rem;
   color: var(--st-muted);
+  font-size: 0.68rem;
   font-size: 0.68rem;
   letter-spacing: 0.1em;
   font-weight: 600;
@@ -98,7 +135,13 @@ const StyledNavLink = styled(NavLink)`
   &.active {
     background: var(--st-primary); color: white;
     box-shadow: 0 2px 12px rgba(99,102,241,0.35);
+    background: var(--st-primary); color: white;
+    box-shadow: 0 2px 12px rgba(99,102,241,0.35);
   }
+  &:not(.active):hover { background: var(--st-surface2); color: var(--st-text); }
+  i { flex-shrink: 0; font-size: 1.1rem; width: 20px; text-align: center; }
+`;
+
   &:not(.active):hover { background: var(--st-surface2); color: var(--st-text); }
   i { flex-shrink: 0; font-size: 1.1rem; width: 20px; text-align: center; }
 `;
@@ -117,7 +160,11 @@ const UserCard = styled.div`
 
 const Avatar = styled.div`
   width: 40px; height: 40px; min-width: 40px;
+  width: 40px; height: 40px; min-width: 40px;
   border-radius: 50%;
+  background: rgba(99,102,241,0.18); color: var(--st-primary);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 1rem;
   background: rgba(99,102,241,0.18); color: var(--st-primary);
   display: flex; align-items: center; justify-content: center;
   font-weight: 700; font-size: 1rem;
@@ -177,21 +224,35 @@ const Main = styled.div`
   @media (min-width: 993px) {
     margin-left: ${SIDEBAR_W};
     width: calc(100% - ${SIDEBAR_W});
+  flex: 1 1 auto; display: flex; flex-direction: column;
+  min-width: 0; width: 100%;
+
+  @media (min-width: 993px) {
+    margin-left: ${SIDEBAR_W};
+    width: calc(100% - ${SIDEBAR_W});
   }
+  @media (max-width: 992px) { margin-left: 0; width: 100%; }
   @media (max-width: 992px) { margin-left: 0; width: 100%; }
 `;
 
 const MobileHeader = styled.header`
   display: flex; align-items: center; justify-content: space-between;
+  display: flex; align-items: center; justify-content: space-between;
   border-bottom: 1px solid var(--st-border);
   background: var(--st-surface);
   padding: 0.7rem 1rem;
   position: sticky; top: 0; z-index: 100; flex-shrink: 0;
+  padding: 0.7rem 1rem;
+  position: sticky; top: 0; z-index: 100; flex-shrink: 0;
 
+  @media (min-width: 993px) { display: none; }
   @media (min-width: 993px) { display: none; }
 `;
 
 const MobileLogo = styled.div`
+  width: 34px; height: 34px; min-width: 34px;
+  background: var(--st-primary); border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
   width: 34px; height: 34px; min-width: 34px;
   background: var(--st-primary); border-radius: 8px;
   display: flex; align-items: center; justify-content: center;
@@ -212,10 +273,17 @@ const HamburgerBtn = styled.button`
 
 const ContentWrap = styled.main`
   display: flex; flex-direction: column; flex: 1 1 auto; min-width: 0;
+  display: flex; flex-direction: column; flex: 1 1 auto; min-width: 0;
 `;
 
 const ContentInner = styled.div`
   flex: 1 1 auto;
+  padding: 1.25rem 1rem;
+
+  @media (min-width: 576px)  { padding: 1.5rem 1.25rem; }
+  @media (min-width: 768px)  { padding: 1.75rem 1.5rem; }
+  @media (min-width: 1200px) { padding: 2rem; }
+  @media (min-width: 1400px) { padding: 2.25rem 2.5rem; }
   padding: 1.25rem 1rem;
 
   @media (min-width: 576px)  { padding: 1.5rem 1.25rem; }
@@ -236,11 +304,18 @@ export default function Layout() {
       toast.info('Sesión cerrada correctamente');
       navigate('/login', { replace: true });
     } catch { toast.error('Error al cerrar sesión'); }
+    } catch { toast.error('Error al cerrar sesión'); }
   };
 
   useEffect(() => { setSidebarOpen(false); }, [location.pathname]);
 
+  useEffect(() => { setSidebarOpen(false); }, [location.pathname]);
+
   useEffect(() => {
+    const isNarrow = window.innerWidth < 993;
+    document.body.style.overflow = (sidebarOpen && isNarrow) ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [sidebarOpen]);
     const isNarrow = window.innerWidth < 993;
     document.body.style.overflow = (sidebarOpen && isNarrow) ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
@@ -284,6 +359,8 @@ export default function Layout() {
           {navLinks.map(({ to, icon, label }) => (
             <StyledNavLink key={to} to={to} onClick={() => setSidebarOpen(false)}>
               <i className={`bi ${icon}`} />
+            <StyledNavLink key={to} to={to} onClick={() => setSidebarOpen(false)}>
+              <i className={`bi ${icon}`} />
               <span>{label}</span>
             </StyledNavLink>
           ))}
@@ -322,6 +399,7 @@ export default function Layout() {
         {/* Topbar móvil */}
         <MobileHeader>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <MobileLogo>
               <i className="bi bi-lightning-charge-fill"
                 style={{ color: 'white', fontSize: '0.9rem' }} />
@@ -335,6 +413,8 @@ export default function Layout() {
           </div>
           <HamburgerBtn
             onClick={() => setSidebarOpen(true)}
+            aria-label="Abrir menú de navegación"
+            aria-expanded={sidebarOpen}
             aria-label="Abrir menú de navegación"
             aria-expanded={sidebarOpen}
           >
