@@ -33,6 +33,9 @@ const Sidebar = styled.aside`
   z-index: 1041;
   display: flex;
   flex-direction: column;
+  /* overflow-y auto permite scroll si el contenido no cabe */
+  overflow-y: auto;
+  overflow-x: hidden;
   transition: transform 0.28s cubic-bezier(0.4,0,0.2,1), width 0.28s;
   will-change: transform;
 
@@ -104,15 +107,22 @@ const StyledNavLink = styled(NavLink)`
 `;
 
 const UserBlock = styled.div`
-  padding: 0.85rem 0.85rem 1rem;
+  padding: 0.85rem 0.85rem 1.25rem;
   border-top: 1px solid var(--st-border);
   flex-shrink: 0;
+  /* Evita que el botón quede cortado en cualquier dispositivo */
+  overflow: visible;
+
+  @media (max-width: 768px) {
+    padding: 0.85rem 0.85rem 1.5rem;
+  }
 `;
 
 const UserCard = styled.div`
   display: flex; gap: 0.65rem; align-items: center;
-  margin-bottom: 0.75rem; padding: 0.65rem 0.75rem;
+  margin-bottom: 0.65rem; padding: 0.6rem 0.75rem;
   border-radius: 10px; background: rgba(99,102,241,0.06); min-width: 0;
+  overflow: hidden;
 `;
 
 const Avatar = styled.div`
@@ -123,7 +133,7 @@ const Avatar = styled.div`
   font-weight: 700; font-size: 1rem;
 `;
 
-/* ── Botón cerrar sesión — corregido para móvil ── */
+/* ── Botón cerrar sesión — totalmente visible en todos los dispositivos ── */
 const LogoutBtn = styled.button`
   width: 100%;
   display: flex;
@@ -131,8 +141,10 @@ const LogoutBtn = styled.button`
   justify-content: center;
   gap: 0.55rem;
 
-  /* Área táctil mínima recomendada por Apple/Google: 44px */
+  /* Área táctil mínima Apple/Google: 44px */
   min-height: 44px;
+  /* box-sizing garantiza que padding no recorte el botón */
+  box-sizing: border-box;
   padding: 0.65rem 1rem;
 
   background: rgba(239,68,68,0.1);
@@ -147,6 +159,10 @@ const LogoutBtn = styled.button`
   -webkit-tap-highlight-color: transparent;
   transition: background 0.15s, border-color 0.15s;
   white-space: nowrap;
+  /* Nunca ocultar el botón por overflow del padre */
+  flex-shrink: 0;
+  overflow: visible;
+  position: relative;
 
   &:hover, &:focus-visible {
     background: rgba(239,68,68,0.2);
@@ -161,7 +177,7 @@ const LogoutBtn = styled.button`
 
   i { font-size: 1rem; flex-shrink: 0; }
 
-  /* En móvil: más grande y fácil de pulsar */
+  /* Móvil: más grande y área táctil cómoda */
   @media (max-width: 768px) {
     min-height: 48px;
     font-size: 0.95rem;

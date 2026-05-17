@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { tareaService, iaService } from '../../services/api.service';
 
-const CATEGORIAS = ['General','Trabajo','Personal','Estudio','Proyecto','Salud','Finanzas','Hogar','Otro'];
+const CATEGORIAS = ['General', 'Trabajo', 'Personal', 'Estudio', 'Proyecto', 'Salud', 'Finanzas', 'Hogar', 'Otro'];
 
 export default function ModalCrearTarea({ show, onHide, onCreada }) {
   const [form, setForm] = useState({
@@ -12,12 +12,7 @@ export default function ModalCrearTarea({ show, onHide, onCreada }) {
   const [cargando, setCargando] = useState(false);
   const [sugirendoDesc, setSugirendoDesc] = useState(false);
 
-  const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
-
-  const resetForm = () =>
-    setForm({ titulo: '', descripcion: '', prioridad: 'media', categoria: 'General', fechaVencimiento: '', etiquetas: '' });
-
-  // Bloquear scroll del body mientras el modal está abierto
+  // Bloquear scroll del body cuando el modal está abierto
   useEffect(() => {
     if (show) {
       document.body.style.overflow = 'hidden';
@@ -27,9 +22,20 @@ export default function ModalCrearTarea({ show, onHide, onCreada }) {
     return () => { document.body.style.overflow = ''; };
   }, [show]);
 
-  /* ── IA: sugiere descripción → POST /ai/sugerir-descripcion ── */
+  // Cerrar con tecla Escape
+  useEffect(() => {
+    if (!show) return;
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') onHide();
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [show, onHide]);
+
+  const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
+
   const handleSugerirDesc = async () => {
-    if (!form.titulo.trim()) return toast.warning('Escribe primero el título');
+    if (!form.titulo) return toast.warning('Escribe primero el título');
     setSugirendoDesc(true);
     try {
       const { data } = await iaService.sugerirDescripcion({
@@ -58,7 +64,10 @@ export default function ModalCrearTarea({ show, onHide, onCreada }) {
       };
       await tareaService.crear(payload);
       toast.success('¡Tarea creada correctamente!');
-      resetForm();
+      setForm({
+        titulo: '', descripcion: '', prioridad: 'media',
+        categoria: 'General', fechaVencimiento: '', etiquetas: ''
+      });
       onCreada();
       onHide();
     } catch (err) {
@@ -71,118 +80,102 @@ export default function ModalCrearTarea({ show, onHide, onCreada }) {
     }
   };
 
-  const handleClose = () => { resetForm(); onHide(); };
-
-  // Cerrar al pulsar Escape
-  useEffect(() => {
-    const handleKeyDown = (e) => { if (e.key === 'Escape' && show) handleClose(); };
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [show]);
-
   if (!show) return null;
 
   return (
     <>
-      {/* ── Backdrop: separado del dialog para no interferir con eventos ── */}
+      {/* Backdrop */}
       <div
+        role="presentation"
+        onClick={onHide}
         style={{
-          position: 'fixed',
-          inset: 0,
+          position: 'fixed', inset: 0,
           background: 'rgba(0,0,0,0.65)',
+          backdropFilter: 'blur(2px)',
+          WebkitBackdropFilter: 'blur(2px)',
           zIndex: 1050,
         }}
-        onClick={handleClose}
-        aria-hidden="true"
       />
 
-      {/* ── Dialog: encima del backdrop, scroll propio ── */}
+      {/* Dialog */}
       <div
         role="dialog"
         aria-modal="true"
-        aria-labelledby="modal-crear-tarea-title"
+        aria-labelledby="modal-crear-tarea-titulo"
         style={{
-          position: 'fixed',
-          inset: 0,
-          zIndex: 1051,           // un nivel por encima del backdrop
-          display: 'flex',
-          alignItems: 'flex-start',
-          justifyContent: 'center',
-          padding: '1rem',
-          overflowY: 'auto',      // scroll aquí, no en el backdrop
-          paddingTop: 'max(1rem, env(safe-area-inset-top))',
-          paddingBottom: 'max(1rem, env(safe-area-inset-bottom))',
+          position: 'fixed', inset: 0,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          zIndex: 1051, padding: '1rem',
+          pointerEvents: 'none',
         }}
       >
         <div
           className="modal-content"
           style={{
-            width: '100%',
-            maxWidth: 'min(720px, calc(100vw - 2rem))',
-            margin: 'auto 0',     // centrado vertical cuando hay espacio, pegado arriba cuando no
+            width: '100%', maxWidth: 640,
+            maxHeight: '90vh', overflowY: 'auto',
+            borderRadius: 'var(--st-radius)',
+            border: '1px solid var(--st-border)',
+            background: 'var(--st-surface)',
+            pointerEvents: 'all',
           }}
-          // Evita que el clic dentro del card cierre el modal
           onClick={e => e.stopPropagation()}
         >
-
           {/* Header */}
           <div className="modal-header">
             <h5
-              id="modal-crear-tarea-title"
+              id="modal-crear-tarea-titulo"
               className="modal-title fw-semibold d-flex align-items-center gap-2"
             >
               <i className="bi bi-plus-circle" style={{ color: 'var(--st-primary)' }} />
               Nueva Tarea
             </h5>
-            <button className="btn-close btn-close-white" onClick={handleClose} aria-label="Cerrar" />
+            <button
+              className="btn-close btn-close-white"
+              aria-label="Cerrar"
+              onClick={onHide}
+            />
           </div>
 
+          {/* Formulario */}
           <form onSubmit={handleSubmit}>
-            {/* Body con scroll interno si el contenido es largo en pantallas pequeñas */}
-            <div
-              className="modal-body"
-              style={{ overflowY: 'auto', maxHeight: 'calc(100dvh - 200px)' }}
-            >
+            <div className="modal-body">
 
               {/* Título */}
               <div className="mb-3">
-                <label className="form-label">
+                <label className="form-label" htmlFor="tarea-titulo">
                   Título <span style={{ color: 'var(--st-danger)' }}>*</span>
                 </label>
                 <input
+                  id="tarea-titulo"
                   type="text"
                   name="titulo"
                   className="form-control"
                   placeholder="¿Qué necesitas hacer?"
-                  required
-                  minLength={3}
-                  maxLength={100}
+                  required minLength={3} maxLength={100}
                   value={form.titulo}
                   onChange={handleChange}
                   autoFocus
                 />
               </div>
 
-              {/* Descripción + botón IA */}
+              {/* Descripción con sugerencia IA */}
               <div className="mb-3">
-                <div className="d-flex justify-content-between align-items-center mb-1 gap-2 flex-wrap">
-                  <label className="form-label mb-0">Descripción</label>
-
-                  {/* Llama a iaService.sugerirDescripcion → POST /ai/sugerir-descripcion */}
+                <div className="d-flex justify-content-between align-items-center mb-1">
+                  <label className="form-label mb-0" htmlFor="tarea-descripcion">
+                    Descripción
+                  </label>
                   <button
                     type="button"
-                    className="btn btn-sm d-flex align-items-center gap-1 flex-shrink-0"
+                    className="btn btn-sm d-flex align-items-center gap-1"
                     onClick={handleSugerirDesc}
                     disabled={sugirendoDesc}
-                    title="Genera una descripción con IA basada en el título, categoría y prioridad"
+                    aria-label="Sugerir descripción con IA"
                     style={{
                       background: 'rgba(99,102,241,0.15)',
                       color: 'var(--st-primary)',
                       border: '1px solid rgba(99,102,241,0.3)',
-                      fontSize: '0.78rem',
-                      padding: '4px 12px',
-                      borderRadius: 20,
-                      whiteSpace: 'nowrap',
+                      fontSize: '0.78rem', padding: '3px 10px', borderRadius: 20,
                     }}
                   >
                     {sugirendoDesc
@@ -192,23 +185,25 @@ export default function ModalCrearTarea({ show, onHide, onCreada }) {
                   </button>
                 </div>
                 <textarea
+                  id="tarea-descripcion"
                   name="descripcion"
                   className="form-control"
                   rows={3}
                   maxLength={1000}
-                  placeholder="Describe la tarea en detalle... o deja que la IA lo haga por ti"
+                  placeholder="Describe la tarea en detalle..."
                   value={form.descripcion}
                   onChange={handleChange}
                 />
               </div>
 
-              {/* Prioridad · Categoría · Fecha */}
-              <div className="row g-3 mb-3">
+              {/* Prioridad, Categoría, Fecha */}
+              <div className="row g-3">
                 <div className="col-6 col-md-4">
-                  <label className="form-label">
+                  <label className="form-label" htmlFor="tarea-prioridad">
                     Prioridad <span style={{ color: 'var(--st-danger)' }}>*</span>
                   </label>
                   <select
+                    id="tarea-prioridad"
                     name="prioridad"
                     className="form-select"
                     value={form.prioridad}
@@ -222,8 +217,9 @@ export default function ModalCrearTarea({ show, onHide, onCreada }) {
                 </div>
 
                 <div className="col-6 col-md-4">
-                  <label className="form-label">Categoría</label>
+                  <label className="form-label" htmlFor="tarea-categoria">Categoría</label>
                   <select
+                    id="tarea-categoria"
                     name="categoria"
                     className="form-select"
                     value={form.categoria}
@@ -234,10 +230,11 @@ export default function ModalCrearTarea({ show, onHide, onCreada }) {
                 </div>
 
                 <div className="col-12 col-md-4">
-                  <label className="form-label">
-                    Vencimiento <span style={{ color: 'var(--st-danger)' }}>*</span>
+                  <label className="form-label" htmlFor="tarea-fecha">
+                    Fecha de vencimiento <span style={{ color: 'var(--st-danger)' }}>*</span>
                   </label>
                   <input
+                    id="tarea-fecha"
                     type="date"
                     name="fechaVencimiento"
                     className="form-control"
@@ -250,14 +247,15 @@ export default function ModalCrearTarea({ show, onHide, onCreada }) {
               </div>
 
               {/* Etiquetas */}
-              <div>
-                <label className="form-label">
+              <div className="mt-3">
+                <label className="form-label" htmlFor="tarea-etiquetas">
                   Etiquetas{' '}
-                  <span style={{ color: 'var(--st-muted)', fontWeight: 400, fontSize: '0.8rem' }}>
+                  <span style={{ color: 'var(--st-muted)', fontWeight: 400 }}>
                     (separadas por coma)
                   </span>
                 </label>
                 <input
+                  id="tarea-etiquetas"
                   type="text"
                   name="etiquetas"
                   className="form-control"
@@ -268,38 +266,32 @@ export default function ModalCrearTarea({ show, onHide, onCreada }) {
               </div>
             </div>
 
-            {/* Footer — siempre visible, nunca se corta */}
-            <div
-              className="modal-footer gap-2"
-              style={{ flexShrink: 0 }}
-            >
+            {/* Footer */}
+            <div className="modal-footer">
               <button
                 type="button"
-                className="btn flex-fill"
-                onClick={handleClose}
+                className="btn"
+                onClick={onHide}
                 style={{
                   background: 'var(--st-surface2)',
                   color: 'var(--st-muted)',
-
                   border: '1px solid var(--st-border)',
-
                 }}
               >
                 Cancelar
               </button>
               <button
                 type="submit"
-                className="btn btn-primary flex-fill d-flex align-items-center justify-content-center gap-2"
+                className="btn btn-primary d-flex align-items-center gap-2"
                 disabled={cargando}
               >
                 {cargando
-                  ? <><span className="spinner-border spinner-border-sm" /> Creando...</>
-                  : <><i className="bi bi-check-lg" /> Crear tarea</>
+                  ? <><span className="spinner-border spinner-border-sm" />Creando...</>
+                  : <><i className="bi bi-check-lg" />Crear tarea</>
                 }
               </button>
             </div>
           </form>
-
         </div>
       </div>
     </>
