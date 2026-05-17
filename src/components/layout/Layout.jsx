@@ -111,11 +111,13 @@ const UserBlock = styled.div`
   border-top: 1px solid var(--st-border);
   flex-shrink: 0;
   overflow: visible;
+  position: relative;
+  z-index: 5;
   background: var(--st-surface); /* Forzar fondo idéntico para que no transparente bordes */
 
   @media (max-width: 768px) {
     /* Incrementamos sutilmente el padding inferior para dar espacio al borde y sombra */
-    padding: 1rem 0.85rem 2rem; 
+    padding: 1.25rem 0.85rem 2.25rem; 
   }
 `;
 
