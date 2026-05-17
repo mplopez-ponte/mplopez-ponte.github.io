@@ -141,13 +141,18 @@ const LogoutBtn = styled.button`
   align-items: center;
   justify-content: center;
   gap: 0.55rem;
+
+  /* Área táctil e inline */
   min-height: 44px;
   box-sizing: border-box;
   padding: 0.65rem 1rem;
-  background: rgba(239,68,68,0.1);
+
+  /* Estilos base (Escritorio) */
+  background: rgba(239, 68, 68, 0.1);
   color: #f87171;
-  border: 1px solid rgba(239,68,68,0.25);
+  border: 1px solid rgba(239, 68, 68, 0.25);
   border-radius: 8px;
+
   font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
@@ -156,42 +161,43 @@ const LogoutBtn = styled.button`
   transition: background 0.15s, border-color 0.15s, transform 0.1s;
   white-space: nowrap;
   flex-shrink: 0;
-  overflow: visible;
-  position: relative;
   
-  /* 💡 Previene que el fondo se desborde sobre el pixel del borde */
-  background-clip: padding-box; 
+  /* 🚀 Súper nitidez: Evita renderizados borrosos en capas de GPU */
+  transform: translateZ(0);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 
   &:hover, &:focus-visible {
-    background: rgba(239,68,68,0.2);
-    border-color: rgba(239,68,68,0.45);
+    background: rgba(239, 68, 68, 0.2);
+    border-color: rgba(239, 68, 68, 0.45);
     outline: none;
   }
 
   &:active {
-    background: rgba(239,68,68,0.28);
-    transform: scale(0.98);
+    background: rgba(239, 68, 68, 0.28);
+    transform: scale(0.98) translateZ(0); /* Mantenemos el hack de GPU al presionar */
   }
 
   i { font-size: 1rem; flex-shrink: 0; }
 
+  /* 📱 Optimizaciones exclusivas para móviles (Más fuerte y definido) */
   @media (max-width: 768px) {
     min-height: 48px;
     font-size: 0.95rem;
+    font-weight: 700; /* Subimos el grosor del texto para más impacto */
     padding: 0.75rem 1rem;
     border-radius: 10px;
+    
+    /* Cambiamos a colores sólidos/opacos más potentes */
+    background: #1e1517; /* Un fondo oscuro con tinte rojizo para que contraste */
+    color: #ff6b6b;      /* Un rojo/salmón más encendido y visible */
+    
+    /* Borde un poco más grueso y con color sólido para evitar el difuminado móvil */
+    border: 1.5px solid #e04f4f; 
+    
+    /* Añadimos una sombra sutil para despegar el botón del fondo y definir su silueta */
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.08);
   }
-`;
-
-const Main = styled.div`
-  flex: 1 1 auto; display: flex; flex-direction: column;
-  min-width: 0; width: 100%;
-
-  @media (min-width: 993px) {
-    margin-left: ${SIDEBAR_W};
-    width: calc(100% - ${SIDEBAR_W});
-  }
-  @media (max-width: 992px) { margin-left: 0; width: 100%; }
 `;
 
 const MobileHeader = styled.header`
