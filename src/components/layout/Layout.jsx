@@ -112,9 +112,10 @@ const UserBlock = styled.div`
   flex-shrink: 0;
   /* Evita que el botón quede cortado en cualquier dispositivo */
   overflow: visible;
+  background: var(--st-surface); /* Forzar fondo idéntico para no transparentar los bordes
 
   @media (max-width: 768px) {
-    padding: 0.85rem 0.85rem 1.5rem;
+    padding: 1rem 0.85rem 2rem;
   }
 `;
 
@@ -140,29 +141,26 @@ const LogoutBtn = styled.button`
   align-items: center;
   justify-content: center;
   gap: 0.55rem;
-
-  /* Área táctil mínima Apple/Google: 44px */
   min-height: 44px;
-  /* box-sizing garantiza que padding no recorte el botón */
   box-sizing: border-box;
   padding: 0.65rem 1rem;
-
   background: rgba(239,68,68,0.1);
   color: #f87171;
   border: 1px solid rgba(239,68,68,0.25);
   border-radius: 8px;
-
   font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
-  transition: background 0.15s, border-color 0.15s;
+  transition: background 0.15s, border-color 0.15s, transform 0.1s;
   white-space: nowrap;
-  /* Nunca ocultar el botón por overflow del padre */
   flex-shrink: 0;
   overflow: visible;
   position: relative;
+  
+  /* 💡 Previene que el fondo se desborde sobre el pixel del borde */
+  background-clip: padding-box; 
 
   &:hover, &:focus-visible {
     background: rgba(239,68,68,0.2);
@@ -177,7 +175,6 @@ const LogoutBtn = styled.button`
 
   i { font-size: 1rem; flex-shrink: 0; }
 
-  /* Móvil: más grande y área táctil cómoda */
   @media (max-width: 768px) {
     min-height: 48px;
     font-size: 0.95rem;
