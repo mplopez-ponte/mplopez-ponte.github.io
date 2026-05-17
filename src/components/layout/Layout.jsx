@@ -33,7 +33,6 @@ const Sidebar = styled.aside`
   z-index: 1041;
   display: flex;
   flex-direction: column;
-  /* overflow-y auto permite scroll si el contenido no cabe */
   overflow-y: auto;
   overflow-x: hidden;
   transition: transform 0.28s cubic-bezier(0.4,0,0.2,1), width 0.28s;
@@ -95,7 +94,6 @@ const StyledNavLink = styled(NavLink)`
   width: 100%; text-decoration: none;
   transition: background 0.15s, color 0.15s;
   color: var(--st-text); font-size: 0.92rem; font-weight: 500;
-  /* Área táctil mínima recomendada */
   min-height: 44px;
 
   &.active {
@@ -113,9 +111,9 @@ const UserBlock = styled.div`
   overflow: visible;
   position: relative;
   z-index: 5;
+  background: var(--st-surface); /* Evita transparencias raras con scroll inferior */
 
   @media (max-width: 768px) {
-    /* Incrementamos sutilmente el padding inferior para dar espacio al borde y sombra */
     padding: 1.25rem 0.85rem 2.25rem; 
   }
 `;
@@ -135,15 +133,12 @@ const Avatar = styled.div`
   font-weight: 700; font-size: 1rem;
 `;
 
-/* ── Botón cerrar sesión — totalmente visible en todos los dispositivos ── */
 const LogoutBtn = styled.button`
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.55rem;
-
-  /* Área táctil e inline */
   min-height: 44px;
   box-sizing: border-box;
   padding: 0.65rem 1rem;
@@ -153,7 +148,6 @@ const LogoutBtn = styled.button`
   color: #f87171;
   border: 1px solid rgba(239, 68, 68, 0.25);
   border-radius: 8px;
-
   font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
@@ -162,8 +156,9 @@ const LogoutBtn = styled.button`
   transition: background 0.15s, border-color 0.15s, transform 0.1s;
   white-space: nowrap;
   flex-shrink: 0;
+  overflow: visible;
+  position: relative;
   
-  /* 🚀 Súper nitidez: Evita renderizados borrosos en capas de GPU */
   transform: translateZ(0);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -176,29 +171,35 @@ const LogoutBtn = styled.button`
 
   &:active {
     background: rgba(239, 68, 68, 0.28);
-    transform: scale(0.98) translateZ(0); /* Mantenemos el hack de GPU al presionar */
+    transform: scale(0.98) translateZ(0);
   }
 
   i { font-size: 1rem; flex-shrink: 0; }
 
-  /* 📱 Optimizaciones exclusivas para móviles (Más fuerte y definido) */
+  /* 📱 Móvil: Ultra definido, fuerte e inmune a recortes de pantalla */
   @media (max-width: 768px) {
     min-height: 48px;
     font-size: 0.95rem;
-    font-weight: 700; /* Subimos el grosor del texto para más impacto */
+    font-weight: 700;
     padding: 0.75rem 1rem;
     border-radius: 10px;
-    
-    /* Cambiamos a colores sólidos/opacos más potentes */
-    background: #1e1517; /* Un fondo oscuro con tinte rojizo para que contraste */
-    color: #ff6b6b;      /* Un rojo/salmón más encendido y visible */
-    
-    /* Borde un poco más grueso y con color sólido para evitar el difuminado móvil */
+    background: #1e1517; 
+    color: #ff6b6b;      
     border: 1.5px solid #e04f4f; 
-    
-    /* Añadimos una sombra sutil para despegar el botón del fondo y definir su silueta */
     box-shadow: 0 2px 8px rgba(239, 68, 68, 0.08);
   }
+`;
+
+/* 💡 RE-AGREGADO: Este componente faltaba arriba y rompía la aplicación */
+const Main = styled.div`
+  flex: 1 1 auto; display: flex; flex-direction: column;
+  min-width: 0; width: 100%;
+
+  @media (min-width: 993px) {
+    margin-left: ${SIDEBAR_W};
+    width: calc(100% - ${SIDEBAR_W});
+  }
+  @media (max-width: 992px) { margin-left: 0; width: 100%; }
 `;
 
 const MobileHeader = styled.header`
@@ -221,7 +222,6 @@ const HamburgerBtn = styled.button`
   background: var(--st-surface2); color: var(--st-text);
   border: 1px solid var(--st-border); border-radius: 8px;
   padding: 0.38rem 0.55rem; cursor: pointer;
-  /* Área táctil mínima */
   min-width: 44px; min-height: 44px;
   display: flex; align-items: center; justify-content: center;
   touch-action: manipulation;
@@ -279,7 +279,6 @@ export default function Layout() {
       )}
 
       <Sidebar $open={sidebarOpen} aria-label="Menú de navegación">
-
         {/* Logo */}
         <SidebarHeader>
           <LogoCircle>
@@ -329,13 +328,11 @@ export default function Layout() {
             </div>
           </UserCard>
 
-          {/* ✅ Botón corregido para móvil */}
           <LogoutBtn onClick={handleLogout} aria-label="Cerrar sesión">
             <i className="bi bi-box-arrow-right" />
             <span>Cerrar sesión</span>
           </LogoutBtn>
         </UserBlock>
-
       </Sidebar>
 
       <Main>
