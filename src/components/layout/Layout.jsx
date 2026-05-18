@@ -143,6 +143,7 @@ const UserBlock = styled.div`
     padding: 1rem 0.85rem 1.75rem; 
   }
 `;
+
 const UserCard = styled.div`
   display: flex; gap: 0.65rem; align-items: center;
   margin-bottom: 0.65rem; padding: 0.6rem 0.75rem;
