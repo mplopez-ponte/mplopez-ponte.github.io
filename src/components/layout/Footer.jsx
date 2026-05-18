@@ -117,7 +117,6 @@ export default function Footer() {
                 { label: 'Node + Express', color: '#68A063' },
                 { label: 'Mongo', color: '#47A248' },
                 { label: 'OpenAI', color: '#10a37f' },
-                { label: 'API Docs', color: '#6f42c1'},
 
               ].map(({ label, color }) => (
                 <span
@@ -142,7 +141,7 @@ export default function Footer() {
                 href="https://smarttask-ia-backend-production.up.railway.app/api/docs/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn btn-xs ms-1 px-2 py-0.5 d-none d-md-inline-flex align-items-center gap-1 fw-semibold"
+                className="btn btn-xs ms-1 px-2 py-0.5 d-inline-flex align-items-center gap-1 fw-semibold"
                 style={{
                   fontSize: '0.65rem',
                   borderRadius: '12px',
@@ -150,7 +149,8 @@ export default function Footer() {
                   color: 'var(--st-primary)',
                   background: 'transparent',
                   textDecoration: 'none',
-                  lineHeight: 1
+                  lineHeight: 1,
+                  marginTop: '0.25rem'
                 }}
               >
                 <i className="bi bi-book-code" style={{ fontSize: '0.65rem' }} />
