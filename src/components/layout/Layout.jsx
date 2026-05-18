@@ -25,22 +25,21 @@ const Overlay = styled.div`
 
 const Sidebar = styled.aside`
   width: ${SIDEBAR_W};
-  /* Altura que ocupará el sidebar */
   height: 100vh;
+  height: calc(var(--vh, 1vh) * 100); 
   background: var(--st-surface);
   border-right: 1px solid var(--st-border);
   position: fixed;
   left: 0; top: 0; bottom: 0;
   z-index: 1041;
+  
+  /* 💡 Flexbox vertical para congelar el header y el footer */
   display: flex;
   flex-direction: column;
-  /* Habilitar el scroll interno del sidebar sin afectar el fondo */
-  overflow-y: auto;
-  overscroll-behavior-y: contain;
-  /* Ocultar barra de desplazamiento en navegadores Webkit (Chrome, Safari) */
-  scrollbar-width: none; /* Firefox */
-  /* Ocultar barra en Chrome, Safari */
-  -webkit-scrollbar { display: none; }
+  
+  /* 💡 Quitamos el overflow de aquí, ya no lo necesita el contenedor padre */
+  overflow: hidden; 
+  
   transition: transform 0.28s cubic-bezier(0.4,0,0.2,1), width 0.28s;
   will-change: transform;
 
@@ -79,9 +78,24 @@ const LogoCircle = styled.div`
 
 const Nav = styled.nav`
   padding: 1rem 0.75rem;
-  flex: 1 1 auto;
-  display: flex; flex-direction: column;
-  overflow-y: auto;
+  
+  /* 💡 Absorbe todo el espacio disponible empujando el bloque de usuario abajo */
+  flex: 1 1 auto; 
+  display: flex; 
+  flex-direction: column;
+  
+  /* 💡 Si el contenido es muy alto, el scroll nacerá SOLO aquí dentro */
+  overflow-y: auto; 
+  overflow-x: hidden;
+
+  /* Estilizado opcional de la barra de scroll para que se vea sutil (Webkit) */
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(99, 102, 241, 0.2);
+    border-radius: 4px;
+  }
 `;
 
 const SectionLabel = styled.p`
@@ -113,21 +127,22 @@ const StyledNavLink = styled(NavLink)`
 const UserBlock = styled.div`
   padding: 0.85rem 0.85rem 1.25rem;
   border-top: 1px solid var(--st-border);
-  flex-shrink: 0;
+  
+  /* 💡 Evita que el contenedor flexible lo colapse o encoja */
+  flex-shrink: 0; 
+  
   overflow: visible;
   position: relative;
   z-index: 5;
-  background: var(--st-surface); /* Evita transparencias raras con scroll inferior */
-
-  /* Forzamos a que el contenedor respete los límites de la caja */
+  background: var(--st-surface);
   box-sizing: border-box;
   width: 100%;
 
   @media (max-width: 768px) {
-    padding: 1rem 0.75rem 2rem; /* Reducimos sutilmente el margen lateral  interno */
+    /* Mantenemos un resguardo inferior cómodo para la barra del móvil */
+    padding: 1rem 0.85rem 1.75rem; 
   }
 `;
-
 const UserCard = styled.div`
   display: flex; gap: 0.65rem; align-items: center;
   margin-bottom: 0.65rem; padding: 0.6rem 0.75rem;
