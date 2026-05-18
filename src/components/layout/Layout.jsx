@@ -113,8 +113,12 @@ const UserBlock = styled.div`
   z-index: 5;
   background: var(--st-surface); /* Evita transparencias raras con scroll inferior */
 
+  /* Forzamos a que el contenedor respete los límites de la caja */
+  box-sizing: border-box;
+  width: 100%;
+
   @media (max-width: 768px) {
-    padding: 1.25rem 0.85rem 2.25rem; 
+    padding: 1rem 0.75rem 2rem; /* Reducimos sutilmente el margen lateral  interno */
   }
 `;
 
@@ -143,7 +147,7 @@ const LogoutBtn = styled.button`
   box-sizing: border-box;
   padding: 0.65rem 1rem;
 
-  /* Estilos base (Escritorio) */
+  /* Estilos base */
   background: rgba(239, 68, 68, 0.1);
   color: #f87171;
   border: 1px solid rgba(239, 68, 68, 0.25);
@@ -154,7 +158,6 @@ const LogoutBtn = styled.button`
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
   transition: background 0.15s, border-color 0.15s, transform 0.1s;
-  white-space: nowrap;
   flex-shrink: 0;
   overflow: visible;
   position: relative;
@@ -176,17 +179,21 @@ const LogoutBtn = styled.button`
 
   i { font-size: 1rem; flex-shrink: 0; }
 
-  /* 📱 Móvil: Ultra definido, fuerte e inmune a recortes de pantalla */
+  /* 📱 Móvil: Evita el corte horizontal y se amolda perfectamente */
   @media (max-width: 768px) {
-    min-height: 48px;
-    font-size: 0.95rem;
-    font-weight: 700;
-    padding: 0.75rem 1rem;
+    min-height: 46px;
+    padding: 0.75rem 0.85rem; /* Ajuste el colchón interno */
     border-radius: 10px;
     background: #1e1517; 
     color: #ff6b6b;      
     border: 1.5px solid #e04f4f; 
     box-shadow: 0 2px 8px rgba(239, 68, 68, 0.08);
+
+    /* 💡 SOLUCIÓN AL CORTE: */
+    font-size: 0.88rem; /* Bajamos un pixel el texto para que quepa completo */
+    font-weight: 700;
+    white-space: normal; /* Permite que el texto se acomode si la pantalla es ultra estrecha */
+    word-break: keep-all; 
   }
 `;
 
