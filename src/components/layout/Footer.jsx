@@ -117,6 +117,8 @@ export default function Footer() {
                 { label: 'Node + Express', color: '#68A063' },
                 { label: 'Mongo', color: '#47A248' },
                 { label: 'OpenAI', color: '#10a37f' },
+                { label: 'API Docs', color: '#6f42c1'},
+
               ].map(({ label, color }) => (
                 <span
                   key={label}
