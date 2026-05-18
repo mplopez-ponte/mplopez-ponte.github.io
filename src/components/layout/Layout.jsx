@@ -11,6 +11,7 @@ const SIDEBAR_W_TABLET = '220px';
 const LayoutRoot = styled.div`
   display: flex;
   min-height: 100vh;
+  min-height: calc(var(--vh, 1vh) * 100);
   overflow-x: hidden;
 `;
 
@@ -26,6 +27,7 @@ const Overlay = styled.div`
 const Sidebar = styled.aside`
   width: ${SIDEBAR_W};
   height: 100vh;
+  /* 🚀 Clave 1: Forzar altura real calculada dinámicamente por JS */
   height: calc(var(--vh, 1vh) * 100); 
   background: var(--st-surface);
   border-right: 1px solid var(--st-border);
@@ -33,11 +35,9 @@ const Sidebar = styled.aside`
   left: 0; top: 0; bottom: 0;
   z-index: 1041;
   
-  /* 💡 Flexbox vertical para congelar el header y el footer */
+  /* Flexbox estricto */
   display: flex;
   flex-direction: column;
-  
-  /* 💡 Quitamos el overflow de aquí, ya no lo necesita el contenedor padre */
   overflow: hidden; 
   
   transition: transform 0.28s cubic-bezier(0.4,0,0.2,1), width 0.28s;
@@ -78,17 +78,14 @@ const LogoCircle = styled.div`
 
 const Nav = styled.nav`
   padding: 1rem 0.75rem;
-  
-  /* 💡 Absorbe todo el espacio disponible empujando el bloque de usuario abajo */
   flex: 1 1 auto; 
   display: flex; 
   flex-direction: column;
   
-  /* 💡 Si el contenido es muy alto, el scroll nacerá SOLO aquí dentro */
+  /* 🚀 Clave 2: El scroll vertical vive EXCLUSIVAMENTE aquí dentro */
   overflow-y: auto; 
   overflow-x: hidden;
 
-  /* Estilizado opcional de la barra de scroll para que se vea sutil (Webkit) */
   &::-webkit-scrollbar {
     width: 4px;
   }
@@ -128,7 +125,7 @@ const UserBlock = styled.div`
   padding: 0.85rem 0.85rem 1.25rem;
   border-top: 1px solid var(--st-border);
   
-  /* 💡 Evita que el contenedor flexible lo colapse o encoja */
+  /* 🚀 Clave 3: Bloquear cualquier reducción o aplastamiento flexible */
   flex-shrink: 0; 
   
   overflow: visible;
@@ -139,7 +136,7 @@ const UserBlock = styled.div`
   width: 100%;
 
   @media (max-width: 768px) {
-    /* Mantenemos un resguardo inferior cómodo para la barra del móvil */
+    /* Colchón de seguridad inferior reforzado para la botonera del sistema operativo */
     padding: 1rem 0.85rem 1.75rem; 
   }
 `;
@@ -201,25 +198,22 @@ const LogoutBtn = styled.button`
 
   i { font-size: 1rem; flex-shrink: 0; }
 
-  /* 📱 Móvil: Evita el corte horizontal y se amolda perfectamente */
   @media (max-width: 768px) {
     min-height: 46px;
-    padding: 0.75rem 0.85rem; /* Ajuste el colchón interno */
+    padding: 0.75rem 0.85rem; 
     border-radius: 10px;
     background: #1e1517; 
     color: #ff6b6b;      
     border: 1.5px solid #e04f4f; 
     box-shadow: 0 2px 8px rgba(239, 68, 68, 0.08);
 
-    /* 💡 SOLUCIÓN AL CORTE: */
-    font-size: 0.88rem; /* Bajamos un pixel el texto para que quepa completo */
+    font-size: 0.88rem; 
     font-weight: 700;
-    white-space: normal; /* Permite que el texto se acomode si la pantalla es ultra estrecha */
+    white-space: normal; 
     word-break: keep-all; 
   }
 `;
 
-/* 💡 RE-AGREGADO: Este componente faltaba arriba y rompía la aplicación */
 const Main = styled.div`
   flex: 1 1 auto; display: flex; flex-direction: column;
   min-width: 0; width: 100%;
@@ -286,6 +280,23 @@ export default function Layout() {
       navigate('/login', { replace: true });
     } catch { toast.error('Error al cerrar sesión'); }
   };
+
+  /* 🚀 Clave 4: Listener real para inyectar los píxeles exactos libres del viewport móvil */
+  useEffect(() => {
+    const calcularCalculoVH = () => {
+      const vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
+    };
+    
+    calcularCalculoVH();
+    window.addEventListener('resize', calcularCalculoVH);
+    window.addEventListener('orientationchange', calcularCalculoVH);
+    
+    return () => {
+      window.removeEventListener('resize', calcularCalculoVH);
+      window.removeEventListener('orientationchange', calcularCalculoVH);
+    };
+  }, []);
 
   useEffect(() => { setSidebarOpen(false); }, [location.pathname]);
 
