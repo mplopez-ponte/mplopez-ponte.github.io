@@ -25,7 +25,8 @@ const Overlay = styled.div`
 
 const Sidebar = styled.aside`
   width: ${SIDEBAR_W};
-  min-height: 100vh;
+  /* Altura que ocupará el sidebar */
+  height: 100vh;
   background: var(--st-surface);
   border-right: 1px solid var(--st-border);
   position: fixed;
@@ -33,8 +34,13 @@ const Sidebar = styled.aside`
   z-index: 1041;
   display: flex;
   flex-direction: column;
+  /* Habilitar el scroll interno del sidebar sin afectar el fondo */
   overflow-y: auto;
-  overflow-x: hidden;
+  overscroll-behavior-y: contain;
+  /* Ocultar barra de desplazamiento en navegadores Webkit (Chrome, Safari) */
+  scrollbar-width: none; /* Firefox */
+  /* Ocultar barra en Chrome, Safari */
+  -webkit-scrollbar { display: none; }
   transition: transform 0.28s cubic-bezier(0.4,0,0.2,1), width 0.28s;
   will-change: transform;
 
